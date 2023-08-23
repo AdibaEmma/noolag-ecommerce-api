@@ -3,6 +3,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app/controllers/app.controller';
 import { AppService } from './app/services/app.service';
+import { ProductsModule } from './app/modules/products.module';
 
 let envFile: string;
 if (process.env.NODE_ENV === 'development') {
@@ -28,6 +29,7 @@ if (process.env.NODE_ENV === 'production') {
       database: 'ecommerce_db',
       models: [],
     }),
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
