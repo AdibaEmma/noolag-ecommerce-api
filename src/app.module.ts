@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { HomeController } from './app/controllers/home.controller';
 import { HomeService } from './app/services/home.service';
 import { ProductsModule } from './app/modules/products.module';
 import { CategoriesModule } from './app/modules/categories.module';
+import { RoutingModule } from '@app/modules/routing.module';
+import { DatabaseModule } from '@app/modules/database.module';
 
 let envFile: string;
 if (process.env.NODE_ENV === 'development') {
@@ -21,17 +22,10 @@ if (process.env.NODE_ENV === 'production') {
       envFilePath: envFile,
       isGlobal: true,
     }),
-    SequelizeModule.forRoot({
-      dialect: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: process.env.PG_USERNAME,
-      password: process.env.PG_PASSWORD,
-      database: 'ecommerce_db',
-      models: [],
-    }),
+    DatabaseModule,
     ProductsModule,
     CategoriesModule,
+    RoutingModule,
   ],
   controllers: [HomeController],
   providers: [HomeService],
