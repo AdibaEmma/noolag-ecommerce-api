@@ -1,16 +1,30 @@
-import {Module} from '@nestjs/common';
-import {SequelizeModule} from '@nestjs/sequelize';
-import {AppController} from './app.controller';
-import {AppService} from './app.service';
+import { Module } from '@nestjs/common';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { ConfigModule } from '@nestjs/config';
+import { AppController } from './controllers/app.controller';
+import { AppService } from './services/app.service';
+
+let envFile: string;
+if (process.env.NODE_ENV === 'development') {
+  envFile = '.env';
+}
+
+if (process.env.NODE_ENV === 'production') {
+  envFile = '.env.production';
+}
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: envFile,
+      isGlobal: true,
+    }),
     SequelizeModule.forRoot({
       dialect: 'postgres', // Change this to match your database
       host: 'localhost',
       port: 5432,
-      username: 'your_username',
-      password: 'your_password',
+      username: process.env.PG_USERNAME,
+      password: process.env.PG_PASSWORD,
       database: 'ecommerce_db',
       models: [],
     }),

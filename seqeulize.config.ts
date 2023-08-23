@@ -4,8 +4,8 @@ const sequelize = new Sequelize({
   dialect: 'postgres',
   host: 'localhost',
   port: 5432,
-  username: 'your_username',
-  password: 'your_password',
+  username: process.env.PG_USERNAME,
+  password: process.env.PG_PASSWORD,
   database: 'ecommerce_db',
 });
 
