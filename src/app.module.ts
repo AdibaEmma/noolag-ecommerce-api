@@ -1,10 +1,10 @@
-import {Module} from '@nestjs/common';
-import {SequelizeModule} from '@nestjs/sequelize';
-import {ConfigModule} from '@nestjs/config';
-import {AppController} from './app/controllers/app.controller';
-import {AppService} from './app/services/app.service';
-import {ProductsModule} from './app/modules/products.module';
-import {CategoriesModule} from './app/modules/categories.module';
+import { Module } from '@nestjs/common';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { ConfigModule } from '@nestjs/config';
+import { HomeController } from './app/controllers/home.controller';
+import { HomeService } from './app/services/home.service';
+import { ProductsModule } from './app/modules/products.module';
+import { CategoriesModule } from './app/modules/categories.module';
 
 let envFile: string;
 if (process.env.NODE_ENV === 'development') {
@@ -33,7 +33,7 @@ if (process.env.NODE_ENV === 'production') {
     ProductsModule,
     CategoriesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [HomeController],
+  providers: [HomeService],
 })
 export class AppModule {}

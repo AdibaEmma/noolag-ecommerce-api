@@ -1,6 +1,6 @@
-import { Category, Product } from '@app/entities';
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/sequelize';
+import {Category, Product} from '@app/entities';
+import {Injectable} from '@nestjs/common';
+import {InjectModel} from '@nestjs/sequelize';
 
 @Injectable()
 export class CategoriesService {
