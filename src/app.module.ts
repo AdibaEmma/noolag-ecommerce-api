@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './controllers/app.controller';
-import { AppService } from './services/app.service';
+import { AppController } from './app/controllers/app.controller';
+import { AppService } from './app/services/app.service';
 
 let envFile: string;
 if (process.env.NODE_ENV === 'development') {
@@ -32,4 +32,4 @@ if (process.env.NODE_ENV === 'production') {
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
