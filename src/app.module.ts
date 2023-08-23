@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app/controllers/app.controller';
 import { AppService } from './app/services/app.service';
 import { ProductsModule } from './app/modules/products.module';
+import { CategoriesModule } from './app/modules/categories.module';
 
 let envFile: string;
 if (process.env.NODE_ENV === 'development') {
@@ -30,6 +31,7 @@ if (process.env.NODE_ENV === 'production') {
       models: [],
     }),
     ProductsModule,
+    CategoriesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

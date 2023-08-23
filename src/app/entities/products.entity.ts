@@ -1,20 +1,27 @@
-import { Model, Column, Table } from 'sequelize-typescript';
+/* eslint-disable prettier/prettier */
+import { Model, Column, Table, PrimaryKey, AutoIncrement, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Category } from './categories.entity';
 
 @Table
 export class Product extends Model<Product> {
-  @PrimaryKey
-  @AutoIncrement
-  @Column
-  id: number;
+    @PrimaryKey
+    @AutoIncrement
+    @Column
+    id: number;
 
-  @Column({ nullable = false})
-  name: string;
+    @ForeignKey(() => Category)
+    categoryId: number;
 
-  @Column
-  description: string;
+    @Column({ allowNull: false })
+    name: string;
 
-  @Column({ type: 'DECIMAL(10, 2)' })
-  price: number;
+    @Column
+    description: string;
 
-  // You can add more columns and associations here
+    @Column({ type: 'DECIMAL(10, 2)', allowNull: false })
+    price: number;
+
+
+    @BelongsTo(() => Category)
+    category: Category;
 }
