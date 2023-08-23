@@ -22,7 +22,7 @@ if (process.env.NODE_ENV === 'production') {
       isGlobal: true,
     }),
     SequelizeModule.forRoot({
-      dialect: 'postgres', // Change this to match your database
+      dialect: 'postgres',
       host: 'localhost',
       port: 5432,
       username: process.env.PG_USERNAME,
