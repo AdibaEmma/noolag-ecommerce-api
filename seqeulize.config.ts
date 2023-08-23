@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Sequelize } from 'sequelize-typescript';
 
 const sequelize = new Sequelize({
