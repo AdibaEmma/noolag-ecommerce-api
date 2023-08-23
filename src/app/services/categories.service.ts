@@ -10,4 +10,9 @@ export class CategoriesService {
     @InjectModel(Product)
     private productModel: typeof Product,
   ) {}
+
+  async createCategory(categoryData: Partial<Category>): Promise<Category> {
+    const category = await this.categoryModel.create(categoryData);
+    return category;
+  }
 }
