@@ -1,7 +1,7 @@
-import { CATEGORY_CONSTANTS } from '@app/constants';
-import { Category } from '@app/entities';
+import {CATEGORY_CONSTANTS} from '@app/constants';
+import {Category} from '@app/entities';
 
-const { categories_repository } = CATEGORY_CONSTANTS;
+const {categories_repository} = CATEGORY_CONSTANTS;
 
 export const categoriesProviders = [
   {

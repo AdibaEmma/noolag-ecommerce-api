@@ -1,12 +1,12 @@
-import { Category, Product } from '@app/entities';
-import { Sequelize } from 'sequelize-typescript';
+import {Category, Product} from '@app/entities';
+import {Sequelize} from 'sequelize-typescript';
 
 export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
     useFactory: async () => {
       const sequelize = new Sequelize({
-        dialect: 'postgres', 
+        dialect: 'postgres',
         host: 'localhost',
         port: 5432,
         username: process.env.PG_USERNAME,
