@@ -1,6 +1,6 @@
 import {NestFactory} from '@nestjs/core';
 import {AppModule} from './app.module';
-import {DocumentBuilder, SwaggerModule} from '@nestjs/swagger';
+import {DocumentBuilder, SwaggerDocumentOptions, SwaggerModule} from '@nestjs/swagger';
 import {ValidationPipe} from '@nestjs/common';
 
 async function bootstrap() {
@@ -15,7 +15,11 @@ async function bootstrap() {
     .addTag('categories')
     .build();
 
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
+  const options: SwaggerDocumentOptions = {
+    operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
+  };
+
+  const document = SwaggerModule.createDocument(app, swaggerConfig, options);
   SwaggerModule.setup('api-docs', app, document);
 
   await app.listen(process.env.PORT || 4000);
