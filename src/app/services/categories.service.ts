@@ -19,7 +19,7 @@ export class CategoriesService {
     const existingCategory = await this.categoryRepository.findOne({where: {name}});
 
     if (existingCategory) {
-      throw new ConflictException(`Category with name '${name}' not found.`);
+      throw new ConflictException(`Category with name '${name}' already exists.`);
     }
     const category = await this.categoryRepository.create(categoryData);
     return category;
@@ -27,6 +27,12 @@ export class CategoriesService {
 
   async findAllCategories(): Promise<Category[]> {
     return this.categoryRepository.findAll({
+      include: [Product],
+    });
+  }
+
+  async findCategoryById(id: number): Promise<Category | null> {
+    return this.categoryRepository.findByPk(id, {
       include: [Product],
     });
   }

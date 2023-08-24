@@ -1,7 +1,7 @@
 import { CreateCategoryDto } from '@app/dtos/create-category.dto';
 import {CategoriesService} from '@app/services';
 import {ValidationService} from '@app/services';
-import {Body, Controller, Inject, Post, forwardRef} from '@nestjs/common';
+import {Body, Controller, Get, Inject, Post, forwardRef} from '@nestjs/common';
 import {ApiTags} from '@nestjs/swagger';
 
 @ApiTags('products')
@@ -15,6 +15,11 @@ export class CategoriesController {
   @Post()
   async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     await this.validationService.validateDto<CreateCategoryDto>(CreateCategoryDto, createCategoryDto);
-    await this.categoriesService.createCategory(createCategoryDto);
+    return this.categoriesService.createCategory(createCategoryDto);
+  }
+
+  @Get()
+  async findAllCategories() {
+    return this.categoriesService.findAllCategories();
   }
 }
