@@ -1,8 +1,8 @@
 import {CreateProductDto} from '@app/dtos/create-product.dto';
 import {Product} from '@app/entities';
 import {ProductsService, ValidationService} from '@app/services';
-import {Body, Controller, Inject, Post, forwardRef} from '@nestjs/common';
-import {ApiCreatedResponse, ApiOperation, ApiResponse, ApiTags, ApiUnprocessableEntityResponse} from '@nestjs/swagger';
+import {Body, Controller, Get, Inject, Post, forwardRef} from '@nestjs/common';
+import {ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiResponse, ApiTags, ApiUnprocessableEntityResponse} from '@nestjs/swagger';
 
 @ApiTags('products')
 @Controller()
@@ -20,5 +20,12 @@ export class ProductsController {
   async createProduct(@Body() createProductDto: CreateProductDto) {
     await this.validationService.validateDto<CreateProductDto>(CreateProductDto, createProductDto);
     return this.productsService.createProduct(createProductDto);
+  }
+
+  @Get()
+  @ApiOperation({summary: 'Find All Products'})
+  @ApiOkResponse({description: 'Products returned successfully'})
+  async findAllProducts(): Promise<Product[]> {
+    return this.findAllProducts();
   }
 }

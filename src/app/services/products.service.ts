@@ -14,7 +14,7 @@ export class ProductsService {
     private readonly categoriesService: CategoriesService,
   ) {}
 
-  async createProduct(createProductDto: CreateProductDto) {
+  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
     const {categoryId, name, price} = createProductDto;
     const existingProduct = await this.productRepository.findOne({where: {name}});
     await this.categoriesService.findCategoryById(categoryId);
@@ -28,5 +28,9 @@ export class ProductsService {
     }
 
     return await this.productRepository.create(createProductDto);
+  }
+
+  async findAllProducts(): Promise<Product[]> {
+    return await this.productRepository.findAll();
   }
 }
