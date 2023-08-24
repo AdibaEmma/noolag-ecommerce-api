@@ -46,12 +46,8 @@ export class CategoriesService {
 
   async updateCategory(id: number, updateRequest: UpdateCategoryDto): Promise<Category> {
     const {name, description} = updateRequest;
-    const category = await this.categoryRepository.findByPk(id);
     let changes = false;
-
-    if (!category) {
-      throw new NotFoundException(`Category with id '${id}' not found.`);
-    }
+    const category = await this.findCategoryById(id);
 
     if (name.length > 3 && category.name != name) {
       category.name = name;
@@ -68,5 +64,11 @@ export class CategoriesService {
     }
     await category.save();
     return category;
+  }
+
+  async deleteCategory(id: number): Promise<void> {
+    const category = await this.findCategoryById(id);
+
+    await category.destroy();
   }
 }
