@@ -49,7 +49,7 @@ export class ProductsController {
 
   @Put(':id')
   @ApiOperation({summary: 'Update Product'})
-  @ApiOkResponse({description: 'Product updated successfully'})
+  @ApiOkResponse({description: 'Product updated successfully', type: Product})
   @ApiNotFoundResponse({description: 'Product not found'})
   @ApiForbiddenResponse({description: 'Unauthorized Request'})
   @ApiUnprocessableEntityResponse({description: 'Bad Request'})
