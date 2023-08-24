@@ -1,11 +1,12 @@
-import {PRODUCT_CONSTANTS} from '@app/constants';
-import {CreateProductDto} from '@app/dtos/create-product.dto';
-import {Product} from '@app/entities';
-import {ConflictException, Inject, Injectable, MethodNotAllowedException, NotFoundException} from '@nestjs/common';
-import {CategoriesService} from './categories.service';
+import { PRODUCT_CONSTANTS } from '@app/constants';
+import { CreateProductDto } from '@app/dtos/create-product.dto';
+import { Product } from '@app/entities';
+import { ConflictException, Inject, Injectable, MethodNotAllowedException, NotFoundException } from '@nestjs/common';
+import { CategoriesService } from './categories.service';
 import { UpdateProductDto } from '@app/dtos/update-product.dto';
+import { RedisService } from './redis.service';
 
-const {products_repository: PRODUCTS_REPOSITORY} = PRODUCT_CONSTANTS;
+const { products_repository: PRODUCTS_REPOSITORY } = PRODUCT_CONSTANTS;
 
 @Injectable()
 export class ProductsService {
@@ -13,11 +14,12 @@ export class ProductsService {
     @Inject(PRODUCTS_REPOSITORY)
     private productRepository: typeof Product,
     private readonly categoriesService: CategoriesService,
-  ) {}
+    private readonly redisService: RedisService,
+  ) { }
 
   async createProduct(createProductDto: CreateProductDto): Promise<Product> {
-    const {categoryId, name, price} = createProductDto;
-    const existingProduct = await this.productRepository.findOne({where: {name}});
+    const { categoryId, name, price } = createProductDto;
+    const existingProduct = await this.productRepository.findOne({ where: { name } });
     await this.categoriesService.findCategoryById(categoryId);
 
     if (existingProduct) {
@@ -32,7 +34,15 @@ export class ProductsService {
   }
 
   async findAllProducts(): Promise<Product[]> {
-    return await this.productRepository.findAll();
+    const cachedProducts = await this.redisService.get('allProducts');
+
+    const products = await this.productRepository.findAll();
+
+    if (products.length === cachedProducts.length) {
+      return cachedProducts;
+    }
+    await this.redisService.set('allProducts', products);
+    return products;
   }
 
   async findProductById(id: number): Promise<Product> {
@@ -46,7 +56,7 @@ export class ProductsService {
   }
 
   async updateProduct(id: number, updateProductDto: UpdateProductDto) {
-    const {name, description, price, categoryId} = updateProductDto;
+    const { name, description, price, categoryId } = updateProductDto;
     let changes = false;
 
     const product = await this.findProductById(id);
@@ -83,5 +93,14 @@ export class ProductsService {
     const product = await this.findProductById(id);
 
     await product.destroy();
+  }
+
+  async linkProductToCategory(productId: number, categoryId: number): Promise<void> {
+    const product = await this.productRepository.findByPk(productId);
+    const category = await this.categoriesService.findCategoryById(categoryId);
+    if (product && category) {
+      product.categoryId = categoryId;
+      await product.save();
+    }
   }
 }

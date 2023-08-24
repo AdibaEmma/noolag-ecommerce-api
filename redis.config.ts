@@ -1,8 +1,4 @@
-import { Transport } from '@nestjs/microservices';
-
-export const redisConfig: any = {
-    transport: Transport.REDIS,
-    options: {
-        url: 'redis://localhost:6379',
-    },
+export const redisConfig = {
+  host: 'localhost',
+  port: 6379,
 };

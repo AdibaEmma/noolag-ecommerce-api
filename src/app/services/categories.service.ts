@@ -3,6 +3,7 @@ import {CreateCategoryDto} from '@app/dtos/create-category.dto';
 import {UpdateCategoryDto} from '@app/dtos/update-category.dto';
 import {Category, Product} from '@app/entities';
 import {ConflictException, Inject, Injectable, MethodNotAllowedException, NotFoundException} from '@nestjs/common';
+import {RedisService} from './redis.service';
 
 const {categories_repository: CATEGORIES_REPOSITORY} = CATEGORY_CONSTANTS;
 const {products_repository: PRODUCTS_REPOSITORY} = PRODUCT_CONSTANTS;
@@ -13,6 +14,7 @@ export class CategoriesService {
     private categoryRepository: typeof Category,
     @Inject(PRODUCTS_REPOSITORY)
     private productRepository: typeof Product,
+    private readonly redisService: RedisService,
   ) {}
 
   async createCategory(categoryData: CreateCategoryDto): Promise<Category> {
@@ -27,9 +29,17 @@ export class CategoriesService {
   }
 
   async findAllCategories(): Promise<Category[]> {
-    return await this.categoryRepository.findAll({
+    const cachedCategories = await this.redisService.get('allCategories');
+    const categories = await this.categoryRepository.findAll({
       include: [Product],
     });
+
+    if (categories.length === cachedCategories.length) {
+      return cachedCategories;
+    }
+
+    await this.redisService.set('allCategories', categories);
+    return categories;
   }
 
   async findCategoryById(id: number): Promise<Category | null> {
