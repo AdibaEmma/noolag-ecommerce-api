@@ -78,4 +78,10 @@ export class ProductsService {
     await product.save();
     return product;
   }
+
+  async deleteProduct(id: number): Promise<void> {
+    const product = await this.findProductById(id);
+
+    await product.destroy();
+  }
 }

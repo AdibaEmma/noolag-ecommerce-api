@@ -1,8 +1,8 @@
 import {CreateProductDto} from '@app/dtos/create-product.dto';
-import { UpdateProductDto } from '@app/dtos/update-product.dto';
+import {UpdateProductDto} from '@app/dtos/update-product.dto';
 import {Product} from '@app/entities';
 import {ProductsService, ValidationService} from '@app/services';
-import {Body, Controller, Get, Inject, Param, Post, Put, forwardRef} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Inject, Param, Post, Put, forwardRef} from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiForbiddenResponse,
@@ -56,5 +56,14 @@ export class ProductsController {
   async updateCategory(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto) {
     await this.validationService.validateDto<UpdateProductDto>(UpdateProductDto, updateProductDto);
     return this.productsService.updateProduct(id, updateProductDto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({summary: 'Delete Product'})
+  @ApiOkResponse({description: 'Product deleted successfully'})
+  @ApiForbiddenResponse({description: 'Unauthorized Request'})
+  @ApiNotFoundResponse({description: 'Product not found'})
+  async deleteCategory(@Param('id') id: number): Promise<void> {
+    await this.productsService.deleteProduct(id);
   }
 }
