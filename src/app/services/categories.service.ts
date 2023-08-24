@@ -1,9 +1,10 @@
-import { CATEGORY_CONSTANTS, PRODUCT_CONSTANTS } from '@app/constants';
-import { Category, Product } from '@app/entities';
-import { Inject, Injectable } from '@nestjs/common';
+import {CATEGORY_CONSTANTS, PRODUCT_CONSTANTS} from '@app/constants';
+import {CreateCategoryDto} from '@app/dtos/create-category.dto';
+import {Category, Product} from '@app/entities';
+import {ConflictException, Inject, Injectable} from '@nestjs/common';
 
-const { categories_repository: CATEGORIES_REPOSITORY } = CATEGORY_CONSTANTS;
-const { products_repository: PRODUCTS_REPOSITORY } = PRODUCT_CONSTANTS;
+const {categories_repository: CATEGORIES_REPOSITORY} = CATEGORY_CONSTANTS;
+const {products_repository: PRODUCTS_REPOSITORY} = PRODUCT_CONSTANTS;
 @Injectable()
 export class CategoriesService {
   constructor(
@@ -11,9 +12,15 @@ export class CategoriesService {
     private categoryRepository: typeof Category,
     @Inject(PRODUCTS_REPOSITORY)
     private productRepository: typeof Product,
-  ) { }
+  ) {}
 
-  async createCategory(categoryData: Partial<Category>): Promise<Category> {
+  async createCategory(categoryData: CreateCategoryDto): Promise<Category> {
+    const {name} = categoryData;
+    const existingCategory = await this.categoryRepository.findOne({where: {name}});
+
+    if (existingCategory) {
+      throw new ConflictException(`Category with name '${name}' not found.`);
+    }
     const category = await this.categoryRepository.create(categoryData);
     return category;
   }
