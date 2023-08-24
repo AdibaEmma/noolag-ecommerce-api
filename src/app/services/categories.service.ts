@@ -1,7 +1,8 @@
 import {CATEGORY_CONSTANTS, PRODUCT_CONSTANTS} from '@app/constants';
 import {CreateCategoryDto} from '@app/dtos/create-category.dto';
+import {UpdateCategoryDto} from '@app/dtos/update-category.dto';
 import {Category, Product} from '@app/entities';
-import {ConflictException, Inject, Injectable, NotFoundException} from '@nestjs/common';
+import {ConflictException, Inject, Injectable, MethodNotAllowedException, NotFoundException} from '@nestjs/common';
 
 const {categories_repository: CATEGORIES_REPOSITORY} = CATEGORY_CONSTANTS;
 const {products_repository: PRODUCTS_REPOSITORY} = PRODUCT_CONSTANTS;
@@ -40,6 +41,32 @@ export class CategoriesService {
       throw new NotFoundException(`Category with id '${id}' not found.`);
     }
 
+    return category;
+  }
+
+  async updateCategory(id: number, updateRequest: UpdateCategoryDto): Promise<Category> {
+    const {name, description} = updateRequest;
+    const category = await this.categoryRepository.findByPk(id);
+    let changes = false;
+
+    if (!category) {
+      throw new NotFoundException(`Category with id '${id}' not found.`);
+    }
+
+    if (name.length > 3 && category.name != name) {
+      category.name = name;
+      changes = true;
+    }
+
+    if (description.length > 0 && category.description != description) {
+      category.description = description;
+      changes = true;
+    }
+
+    if (!changes) {
+      throw new MethodNotAllowedException('Could not perform update');
+    }
+    await category.save();
     return category;
   }
 }

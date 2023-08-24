@@ -1,8 +1,9 @@
 import { CreateCategoryDto } from '@app/dtos/create-category.dto';
+import { UpdateCategoryDto } from '@app/dtos/update-category.dto';
 import { Category } from '@app/entities';
 import {CategoriesService} from '@app/services';
 import {ValidationService} from '@app/services';
-import {Body, Controller, Get, Inject, Param, Post, forwardRef} from '@nestjs/common';
+import {Body, Controller, Get, Inject, Param, Post, Put, forwardRef} from '@nestjs/common';
 import {ApiTags} from '@nestjs/swagger';
 
 @ApiTags('products')
@@ -27,5 +28,11 @@ export class CategoriesController {
   @Get(':id')
   async findCategoryById(@Param('id') id: number): Promise<Category> {
     return this.categoriesService.findCategoryById(id);
+  }
+
+  @Put(':id')
+  async updateCategory(@Param('id') id: number, @Body() updateCategoryDto: UpdateCategoryDto) {
+    await this.validationService.validateDto<UpdateCategoryDto>(UpdateCategoryDto, updateCategoryDto);
+    return this.categoriesService.updateCategory(id, updateCategoryDto);
   }
 }
