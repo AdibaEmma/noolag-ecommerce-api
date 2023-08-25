@@ -6,23 +6,14 @@ import {ProductsModule} from './app/modules/products.module';
 import {CategoriesModule} from './app/modules/categories.module';
 import {RoutingModule} from '@app/modules/routing.module';
 import {DatabaseModule} from '@app/modules/database.module';
-import {AuthModule} from './auth/auth.module';
-import {AuthModule} from './app/auth/auth.module';
-
-let envFile: string;
-if (process.env.NODE_ENV === 'development') {
-  envFile = '.env';
-}
-
-if (process.env.NODE_ENV === 'production') {
-  envFile = '.env.production';
-}
+import {AuthModule} from '@app/auth/auth.module';
+import configuration from '@app/config/configuration';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: envFile,
       isGlobal: true,
+      load: [configuration],
     }),
     DatabaseModule,
     ProductsModule,

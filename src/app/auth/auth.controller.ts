@@ -1,34 +1,19 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete} from '@nestjs/common';
+import {Controller, Post, Body, Inject, forwardRef} from '@nestjs/common';
 import {AuthService} from './auth.service';
-import {CreateAuthDto} from './dto/signup.dto';
-import {UpdateAuthDto} from './dto/login.dto';
+import {ValidationService} from '@app/services';
+import {SignupDto} from './dto';
+import {User} from '@app/entities/users.entity';
 
-@Controller('auth')
+@Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    @Inject(forwardRef(() => AuthService)) private readonly authService: AuthService,
+    @Inject(forwardRef(() => ValidationService)) private readonly validationService: ValidationService,
+  ) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.authService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  @Post('/signup')
+  async signUp(@Body() signUpDto: SignupDto): Promise<{token: string; user: User}> {
+    await this.validationService.validateDto<SignupDto>(SignupDto, signUpDto);
+    return this.authService.signUp(signUpDto);
   }
 }

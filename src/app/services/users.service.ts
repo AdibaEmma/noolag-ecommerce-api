@@ -1,11 +1,10 @@
-import {USERS_CONSTANTS} from '@app/constants/users.constants';
+import {usersConstants} from '@app/constants/constants';
 import {User} from '@app/entities/users.entity';
 import {Inject} from '@nestjs/common';
 
-const {users_repository} = USERS_CONSTANTS;
 export class UsersService {
   constructor(
-    @Inject(users_repository)
+    @Inject(usersConstants.users_repository)
     private usersRepository: typeof User,
   ) {}
 

@@ -1,18 +1,16 @@
-import {CATEGORY_CONSTANTS, PRODUCT_CONSTANTS} from '@app/constants';
 import {CreateCategoryDto} from '@app/dtos/create-category.dto';
 import {UpdateCategoryDto} from '@app/dtos/update-category.dto';
 import {Category, Product} from '@app/entities';
 import {ConflictException, Inject, Injectable, MethodNotAllowedException, NotFoundException} from '@nestjs/common';
 import {RedisService} from './redis.service';
+import {categoriesConstants, productsConstants} from '@app/constants/constants';
 
-const {categories_repository: CATEGORIES_REPOSITORY} = CATEGORY_CONSTANTS;
-const {products_repository: PRODUCTS_REPOSITORY} = PRODUCT_CONSTANTS;
 @Injectable()
 export class CategoriesService {
   constructor(
-    @Inject(CATEGORIES_REPOSITORY)
+    @Inject(categoriesConstants.categories_repository)
     private categoryRepository: typeof Category,
-    @Inject(PRODUCTS_REPOSITORY)
+    @Inject(productsConstants.products_repository)
     private productRepository: typeof Product,
     private readonly redisService: RedisService,
   ) {}
