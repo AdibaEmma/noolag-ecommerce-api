@@ -8,7 +8,7 @@ import {ValidationService} from '@app/services';
 import {usersProviders} from '@app/providers/users.providers';
 import {UsersService} from '@app/services/users.service';
 import {jwtConstants} from '@app/constants/constants';
-import { ConfigService } from '@nestjs/config';
+import {ConfigService} from '@nestjs/config';
 
 @Module({
   imports: [
