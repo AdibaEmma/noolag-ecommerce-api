@@ -32,7 +32,7 @@ export class CategoriesService {
       include: [Product],
     });
 
-    if (categories.length === cachedCategories.length) {
+    if (categories?.length === cachedCategories?.length) {
       return cachedCategories;
     }
 

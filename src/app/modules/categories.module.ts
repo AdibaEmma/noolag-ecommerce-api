@@ -10,18 +10,7 @@ import {RolesGuard} from '@app/guards';
 
 @Module({
   imports: [DatabaseModule],
-  providers: [
-    CategoriesService,
-    ValidationService,
-    RedisService,
-    JwtService,
-    ...categoriesProviders,
-    ...productsProviders,
-    {
-      provide: 'APP_GUARD',
-      useClass: RolesGuard,
-    },
-  ],
+  providers: [CategoriesService, ValidationService, RedisService, JwtService, ...categoriesProviders, ...productsProviders],
   controllers: [CategoriesController],
   exports: [CategoriesService],
 })

@@ -47,14 +47,27 @@ export class AuthService {
     const {email, password} = loginDto;
 
     const user = await this.usersService.findUserByEmail(email);
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!user || !isPasswordMatch) {
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const isPasswordMatch = await bcrypt.compare(password, user?.password);
+    if (!isPasswordMatch) {
       throw new UnauthorizedException('Invalid email or password');
     }
 
     const accessToken = this.generateToken(user);
 
     return {accessToken, user};
+  }
+
+  async validateUser(payload: any): Promise<User | null> {
+    const user = await this.usersRepository.findByPk(payload.sub);
+    if (!user) {
+      return null;
+    }
+
+    return user;
   }
 
   private generateToken(user: User) {

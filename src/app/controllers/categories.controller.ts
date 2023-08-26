@@ -1,8 +1,8 @@
 import {Roles} from '@app/decorators/roles.decorator';
 import {CreateCategoryDto} from '@app/dtos/create-category.dto';
 import {UpdateCategoryDto} from '@app/dtos/update-category.dto';
-import {Category, Role} from '@app/entities';
-import {AuthGuard} from '@app/guards';
+import {Category} from '@app/entities';
+import {AuthGuard, RolesGuard} from '@app/guards';
 import {CategoriesService} from '@app/services';
 import {ValidationService} from '@app/services';
 import {Body, Controller, Delete, Get, Inject, Param, Post, Put, UseGuards, forwardRef} from '@nestjs/common';
@@ -26,6 +26,7 @@ export class CategoriesController {
   ) {}
 
   @Post()
+  @UseGuards(RolesGuard)
   @UseGuards(AuthGuard)
   @Roles('admin')
   @ApiOperation({summary: 'Create category'})
@@ -38,6 +39,9 @@ export class CategoriesController {
   }
 
   @Get()
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
+  @Roles('user', 'admin')
   @ApiOperation({summary: 'Find All categories'})
   @ApiOkResponse({description: 'Categories returned successfully'})
   @ApiForbiddenResponse({description: 'Unauthorized Request'})

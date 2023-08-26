@@ -8,9 +8,10 @@ import {RoutingModule} from '@app/modules/routing.module';
 import {DatabaseModule} from '@app/modules/database.module';
 import {AuthModule} from '@app/auth/auth.module';
 import configuration from '@app/config/configuration';
-import {RolesGuard} from '@app/guards';
+import {AuthGuard, RolesGuard} from '@app/guards';
 import {RolesService} from '@app/services/roles.service';
 import {RolesModule} from '@app/modules/roles.module';
+import {JwtService} from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import {RolesModule} from '@app/modules/roles.module';
     RolesModule,
   ],
   controllers: [HomeController],
-  providers: [HomeService, RolesGuard],
+  providers: [HomeService, JwtService, RolesGuard, AuthGuard],
 })
 export class AppModule implements OnApplicationBootstrap {
   constructor(private roleService: RolesService) {}
