@@ -1,6 +1,8 @@
+import {Roles} from '@app/decorators/roles.decorator';
 import {CreateCategoryDto} from '@app/dtos/create-category.dto';
 import {UpdateCategoryDto} from '@app/dtos/update-category.dto';
 import {Category} from '@app/entities';
+import {Role} from '@app/enums/role.enum';
 import {AuthGuard} from '@app/guards';
 import {CategoriesService} from '@app/services';
 import {ValidationService} from '@app/services';
@@ -25,7 +27,7 @@ export class CategoriesController {
   ) {}
 
   @Post()
-  @UseGuards(AuthGuard)
+  @Roles(Role.Admin)
   @ApiOperation({summary: 'Create category'})
   @ApiCreatedResponse({description: 'Created successfully', type: Category})
   @ApiResponse({status: 409, description: 'Conflict: Missing Field(s)'})

@@ -1,4 +1,5 @@
-import {AutoIncrement, Column, Model, PrimaryKey, Table} from 'sequelize-typescript';
+import {Role} from '@app/enums/role.enum';
+import {AutoIncrement, Column, DataType, Model, PrimaryKey, Table} from 'sequelize-typescript';
 
 @Table
 export class User extends Model<User> {
@@ -21,4 +22,7 @@ export class User extends Model<User> {
 
   @Column
   password: string;
+
+  @Column(DataType.ARRAY(DataType.ENUM))
+  roles: Role[];
 }

@@ -8,6 +8,7 @@ import {RoutingModule} from '@app/modules/routing.module';
 import {DatabaseModule} from '@app/modules/database.module';
 import {AuthModule} from '@app/auth/auth.module';
 import configuration from '@app/config/configuration';
+import {RolesGuard} from '@app/guards';
 
 @Module({
   imports: [
@@ -22,6 +23,12 @@ import configuration from '@app/config/configuration';
     AuthModule,
   ],
   controllers: [HomeController],
-  providers: [HomeService],
+  providers: [
+    HomeService,
+    {
+      provide: 'APP_GUARD',
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}
