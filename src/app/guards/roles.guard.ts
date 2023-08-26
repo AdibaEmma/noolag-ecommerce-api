@@ -27,7 +27,7 @@ export class RolesGuard implements CanActivate {
           as: 'roles',
         },
       ],
-});
+    });
 
     if (!userWithRoles) {
       throw new ForbiddenException('User does not have the required role to access resource');
