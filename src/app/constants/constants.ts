@@ -21,4 +21,5 @@ export const productsConstants = {
 
 export const usersConstants = {
   users_repository: 'USERS_REPOSITORY',
+  roles_repository: 'ROLES_REPOSITORY',
 };

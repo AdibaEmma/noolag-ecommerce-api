@@ -8,6 +8,7 @@ import {ValidationService} from '@app/services';
 import {usersProviders} from '@app/providers/users.providers';
 import {UsersService} from '@app/services/users.service';
 import {ConfigService} from '@nestjs/config';
+import {rolesProviders} from '@app/providers/roles.provider';
 
 @Module({
   imports: [
@@ -26,6 +27,6 @@ import {ConfigService} from '@nestjs/config';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersService, ValidationService, ...usersProviders, Logger],
+  providers: [AuthService, UsersService, ValidationService, ...usersProviders, ...rolesProviders, Logger],
 })
 export class AuthModule {}

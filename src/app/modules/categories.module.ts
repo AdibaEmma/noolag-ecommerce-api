@@ -6,10 +6,22 @@ import {DatabaseModule} from './database.module';
 import {ValidationService} from '@app/services/validation.service';
 import {RedisService} from '@app/services/redis.service';
 import {JwtService} from '@nestjs/jwt';
+import {RolesGuard} from '@app/guards';
 
 @Module({
   imports: [DatabaseModule],
-  providers: [CategoriesService, ValidationService, RedisService, JwtService, ...categoriesProviders, ...productsProviders],
+  providers: [
+    CategoriesService,
+    ValidationService,
+    RedisService,
+    JwtService,
+    ...categoriesProviders,
+    ...productsProviders,
+    {
+      provide: 'APP_GUARD',
+      useClass: RolesGuard,
+    },
+  ],
   controllers: [CategoriesController],
   exports: [CategoriesService],
 })

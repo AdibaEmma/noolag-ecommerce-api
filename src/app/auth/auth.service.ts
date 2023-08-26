@@ -6,10 +6,12 @@ import {JwtService} from '@nestjs/jwt';
 import {usersConstants} from '@app/constants/constants';
 import {User} from '@app/entities/users.entity';
 import {ConfigService} from '@nestjs/config';
+import {Role} from '@app/entities';
 @Injectable()
 export class AuthService {
   constructor(
     @Inject(usersConstants.users_repository) private usersRepository: typeof User,
+    @Inject(usersConstants.roles_repository) private rolesRepository: typeof Role,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private configService: ConfigService,
@@ -35,20 +37,10 @@ export class AuthService {
       password: hashed_password,
     });
 
+    const roles = await this.rolesRepository.findAll({where: {name: 'user'}});
+    await newUser.$set('roles', roles);
     const token = this.generateToken(newUser);
     return {token, user: newUser};
-  }
-
-  private generateToken(user: User) {
-    const payload = {
-      sub: user.id,
-      username: user.username,
-      email: user.email,
-      name: `${user.firstName} ${user.lastName}`,
-    };
-
-    const token = this.jwtService.sign(payload);
-    return token;
   }
 
   public async login(loginDto): Promise<{accessToken: string; user: User}> {
@@ -63,5 +55,18 @@ export class AuthService {
     const accessToken = this.generateToken(user);
 
     return {accessToken, user};
+  }
+
+  private generateToken(user: User) {
+    const payload = {
+      sub: user.id,
+      username: user.username,
+      email: user.email,
+      name: `${user.firstName} ${user.lastName}`,
+      roles: user.roles,
+    };
+
+    const token = this.jwtService.sign(payload);
+    return token;
   }
 }
