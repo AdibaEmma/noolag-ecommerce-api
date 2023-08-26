@@ -1,5 +1,5 @@
 import {Category, Product} from '@app/entities';
-import { User } from '@app/entities/users.entity';
+import {User} from '@app/entities/users.entity';
 import {Sequelize} from 'sequelize-typescript';
 
 export const databaseProviders = [

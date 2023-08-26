@@ -6,10 +6,11 @@ import {DatabaseModule} from './database.module';
 import {categoriesProviders, productsProviders} from '@app/providers';
 import {CategoriesService} from '@app/services';
 import {RedisService} from '@app/services/redis.service';
+import {JwtService} from '@nestjs/jwt';
 
 @Module({
   imports: [DatabaseModule],
   controllers: [ProductsController],
-  providers: [ProductsService, ValidationService, CategoriesService, RedisService, ...productsProviders, ...categoriesProviders],
+  providers: [ProductsService, ValidationService, CategoriesService, RedisService, JwtService, ...productsProviders, ...categoriesProviders],
 })
 export class ProductsModule {}

@@ -1,9 +1,10 @@
 import {CreateCategoryDto} from '@app/dtos/create-category.dto';
 import {UpdateCategoryDto} from '@app/dtos/update-category.dto';
 import {Category} from '@app/entities';
+import {AuthGuard} from '@app/guards';
 import {CategoriesService} from '@app/services';
 import {ValidationService} from '@app/services';
-import {Body, Controller, Delete, Get, Inject, Param, Post, Put, forwardRef} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Inject, Param, Post, Put, UseGuards, forwardRef} from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiForbiddenResponse,
@@ -24,6 +25,7 @@ export class CategoriesController {
   ) {}
 
   @Post()
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: 'Create category'})
   @ApiCreatedResponse({description: 'Created successfully', type: Category})
   @ApiResponse({status: 409, description: 'Conflict: Missing Field(s)'})
@@ -51,6 +53,7 @@ export class CategoriesController {
   }
 
   @Put(':id')
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: 'Update category'})
   @ApiOkResponse({description: 'Category updated successfully'})
   @ApiNotFoundResponse({description: 'Category not found'})
@@ -62,6 +65,7 @@ export class CategoriesController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: 'Delete category'})
   @ApiOkResponse({description: 'Category deleted successfully'})
   @ApiForbiddenResponse({description: 'Unauthorized Request'})
