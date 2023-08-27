@@ -4,6 +4,7 @@ import {Category, Product} from '@app/entities';
 import {ConflictException, Inject, Injectable, MethodNotAllowedException, NotFoundException} from '@nestjs/common';
 import {RedisService} from './redis.service';
 import {categoriesConstants, productsConstants} from '@app/constants/constants';
+import {areContentsEqual} from '@app/helpers';
 
 @Injectable()
 export class CategoriesService {
@@ -32,7 +33,7 @@ export class CategoriesService {
       include: [Product],
     });
 
-    if (categories?.length === cachedCategories?.length) {
+    if (areContentsEqual(categories, cachedCategories)) {
       return cachedCategories;
     }
 

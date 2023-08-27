@@ -7,6 +7,7 @@ import {usersConstants} from '@app/constants/constants';
 import {User} from '@app/entities/users.entity';
 import {ConfigService} from '@nestjs/config';
 import {Role} from '@app/entities';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -40,7 +41,6 @@ export class AuthService {
     const roles = await this.rolesRepository.findAll({where: {name: 'user'}});
     await newUser.$set('roles', roles);
     const token = this.generateToken(newUser);
-    
     return {token, user: newUser};
   }
 
