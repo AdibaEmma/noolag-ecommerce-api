@@ -1,5 +1,5 @@
 import {Match} from '@app/decorators/match.decorator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {ApiProperty, ApiPropertyOptional} from '@nestjs/swagger';
 import {IsAlphanumeric, IsEmail, IsNotEmpty, IsString, Matches, MaxLength, MinLength} from 'class-validator';
 
 export class SignupDto {

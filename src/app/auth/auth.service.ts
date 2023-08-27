@@ -40,6 +40,7 @@ export class AuthService {
     const roles = await this.rolesRepository.findAll({where: {name: 'user'}});
     await newUser.$set('roles', roles);
     const token = this.generateToken(newUser);
+    
     return {token, user: newUser};
   }
 
