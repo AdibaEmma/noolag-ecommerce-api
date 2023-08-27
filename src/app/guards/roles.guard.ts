@@ -8,7 +8,6 @@ export class RolesGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredRoles = this.reflector.getAllAndOverride<string[]>('roles', [context.getHandler(), context.getClass()]);
-    console.log(requiredRoles);
 
     if (!requiredRoles) {
       return true;
@@ -38,7 +37,6 @@ export class RolesGuard implements CanActivate {
     if (!hasRequiredRole) {
       throw new ForbiddenException('User does not have the required role to access resource');
     }
-
     return true;
   }
 }

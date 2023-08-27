@@ -5,7 +5,7 @@ import {CategoriesService} from './categories.service';
 import {UpdateProductDto} from '@app/dtos/update-product.dto';
 import {RedisService} from './redis.service';
 import {productsConstants} from '@app/constants';
-import { areContentsEqual } from '@app/helpers';
+import {areContentsEqual} from '@app/helpers';
 
 @Injectable()
 export class ProductsService {
