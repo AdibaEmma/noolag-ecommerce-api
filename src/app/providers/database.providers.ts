@@ -1,4 +1,5 @@
 import {Category, Product, Role, UserRole} from '@app/entities';
+import {Order} from '@app/entities/orders.entity';
 import {User} from '@app/entities/users.entity';
 import {Sequelize} from 'sequelize-typescript';
 
@@ -14,7 +15,7 @@ export const databaseProviders = [
         password: process.env.PG_PASSWORD,
         database: 'ecommerce_db',
       });
-      sequelize.addModels([Product, Category, User, Role, UserRole]);
+      sequelize.addModels([Product, Category, User, Role, UserRole, Order]);
       await sequelize.sync();
       return sequelize;
     },

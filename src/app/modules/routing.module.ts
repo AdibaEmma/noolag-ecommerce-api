@@ -6,6 +6,7 @@ import { CategoriesModule } from "./categories.module";
 import { RouterModule, Routes } from "@nestjs/core";
 import { AuthModule } from "@app/auth/auth.module";
 import { UsersModule } from "./users.module";
+import { OrdersModule } from "./orders.module";
 
 const routes: Routes = [
     {
@@ -27,11 +28,22 @@ const routes: Routes = [
     {
         path: '/users',
         module: UsersModule
+    },
+    {
+        path: '/orders',
+        module: OrdersModule
     }
 ];
 
 @Module({
-    imports: [RouterModule.register(routes), HomeModule, ProductsModule, CategoriesModule, AuthModule, UsersModule],
+    imports: [
+        RouterModule.register(routes), 
+        HomeModule, 
+        ProductsModule, 
+        CategoriesModule, 
+        AuthModule, 
+        UsersModule, 
+        OrdersModule],
     exports: [],
 })
 export class RoutingModule {}
