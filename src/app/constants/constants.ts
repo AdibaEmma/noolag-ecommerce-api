@@ -21,6 +21,7 @@ export const productsConstants = {
 
 export const ordersConstants = {
   orders_repository: 'ORDERS_REPOSITORY',
+  orderItems_repository: 'ORDERITEMS_REPOSITORY',
 };
 
 export const usersConstants = {

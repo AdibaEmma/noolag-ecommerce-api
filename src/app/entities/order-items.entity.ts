@@ -13,11 +13,11 @@ export class OrderItem extends Model<OrderItem> {
 
   @ForeignKey(() => Order)
   @BelongsTo(() => Order, {as: 'orderAssociation'})
-  orderId: Order;
+  orderId: number;
 
   @ForeignKey(() => Product)
   @BelongsTo(() => Product, {as: 'productAssociation'})
-  productId: Product;
+  productId: number;
 
   @Column
   quantity: number;

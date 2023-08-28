@@ -15,7 +15,7 @@ export class Order extends Model<Order> {
 
   @ForeignKey(() => User)
   @BelongsTo(() => User, {as: 'userAssociation'})
-  user: User;
+  userId: number;
 
   @Column({ type: 'DECIMAL(10, 2)', allowNull: false })
   totalCost: number
