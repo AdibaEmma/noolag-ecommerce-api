@@ -60,4 +60,11 @@ export class Order extends Model<Order> {
 
   @Column
   shippingFee: number;
+
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false
+  })
+  isDeleted: boolean;
 }
