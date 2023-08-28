@@ -17,7 +17,7 @@ export class OrdersService {
   ) {}
 
   async createOrder(createOrderDto: CreateOrderDto, userId: number): Promise<Order> {
-    const {totalCost, shippingAddress, billingAddress, discountAmount, taxAmount, notes, orderItems} = createOrderDto;
+    const {totalCost, shippingAddress, billingAddress, discountAmount, taxAmount, shippingFee, notes, orderItems} = createOrderDto;
 
     await this.userService.findUserById(userId);
 
@@ -27,6 +27,7 @@ export class OrdersService {
       billingAddress,
       discountAmount,
       taxAmount,
+      shippingFee,
       notes,
       userId,
     });

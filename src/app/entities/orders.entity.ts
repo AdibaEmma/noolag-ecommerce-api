@@ -52,13 +52,13 @@ export class Order extends Model<Order> {
   @Column({type: 'text'})
   notes: string;
 
-  @Column
+  @Column({ type: 'DECIMAL(10, 2)'})
   discountAmount: number;
 
-  @Column
+  @Column({ type: 'DECIMAL(10, 2)'})
   taxAmount: number;
 
-  @Column
+  @Column({ type: 'DECIMAL(10, 2)'})
   shippingFee: number;
 
 
