@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsCreditCard, IsNumberString, IsInt} from 'class-validator';
+import {IsNotEmpty, IsCreditCard, IsNumberString} from 'class-validator';
 
 export class CreditCardPaymentDto {
   @IsNotEmpty()
@@ -14,9 +14,4 @@ export class CreditCardPaymentDto {
   @IsNotEmpty()
   @IsNumberString()
   cvv: string;
-
-  @IsNotEmpty()
-  @IsInt()
-  @IsNumberString()
-  amount: number;
 }

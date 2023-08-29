@@ -1,6 +1,6 @@
 export enum PaymentMethod {
   CreditCard = 'credit_card',
-  PayPal = 'paypal',
+  Bank = 'bank',
   Momo = 'mobile_money',
   Other = 'other',
 }

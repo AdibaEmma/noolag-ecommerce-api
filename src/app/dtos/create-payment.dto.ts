@@ -5,6 +5,7 @@ import {IsDecimal, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsPositive
 import {MomoPaymentDto} from './momo-payment.dto';
 import {CreditCardPaymentDto} from './credit-card-payment.dto';
 import {Type} from 'class-transformer';
+import {BankPaymentDto} from './bank-payment.dto';
 
 export class CreatePaymentDto {
   @IsNotEmpty()
@@ -37,4 +38,9 @@ export class CreatePaymentDto {
   @ValidateNested()
   @Type(() => CreditCardPaymentDto)
   creditCardPaymentDetails: CreditCardPaymentDto;
+
+  @ValidateIf((object, value) => object.paymentMethod === PaymentMethod.Bank)
+  @ValidateNested()
+  @Type(() => BankPaymentDto)
+  bankPaymentDetails: BankPaymentDto;
 }
