@@ -1,6 +1,6 @@
 import {ordersConstants} from '@app/constants';
 import {Order, OrderItem} from '@app/entities';
-import {Inject, Injectable} from '@nestjs/common';
+import {Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {RedisService} from './redis.service';
 import {CreateOrderDto} from '@app/dtos';
 import {ProductsService} from './products.service';
@@ -53,5 +53,20 @@ export class OrdersService {
   async findOrdersByUserId(userId: number): Promise<Order[]> {
     const userOrders = await this.ordersRepository.findAll({where: {userId}});
     return userOrders;
+  }
+
+  async findUserOrderById(id: number, userId: number) {
+    const userOrder = await this.ordersRepository.findOne({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!userOrder) {
+      throw new NotFoundException(`Order with id '${id}' not found.`);
+    }
+
+    return userOrder;
   }
 }

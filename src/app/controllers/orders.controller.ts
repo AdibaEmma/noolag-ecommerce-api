@@ -24,4 +24,9 @@ export class OrdersController {
   getUserOrders(@CurrentUser() user: any) {
     return this.ordersService.findOrdersByUserId(user.sub);
   }
+
+  @Get(':id')
+  getUserOrderById(@Param('id') id: number, @CurrentUser() user: any) {
+    return this.ordersService.findUserOrderById(id, user.sub);
+  }
 }
