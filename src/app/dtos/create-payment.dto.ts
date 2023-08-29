@@ -1,5 +1,6 @@
 import {PaymentMethod} from '@app/enums';
-import {IsDecimal, IsEmail, IsNotEmpty, IsNumber, IsPositive} from 'class-validator';
+import {IsCurrencySymbol, IsPaymentMethod} from '@app/validators';
+import {IsDecimal, IsEmail, IsEnum, IsNotEmpty, IsNumber, IsPositive} from 'class-validator';
 
 export class CreatePaymentDto {
   @IsNotEmpty()
@@ -12,10 +13,14 @@ export class CreatePaymentDto {
   amount: number;
 
   @IsNotEmpty()
+  @IsCurrencySymbol()
+  currency: string;
+
+  @IsNotEmpty()
   @IsEmail()
   email: string;
 
+  @IsEnum(PaymentMethod)
+  @IsPaymentMethod()
   paymentMethod: PaymentMethod;
-
-  
 }
