@@ -1,3 +1,5 @@
+import {IsInt, IsNotEmpty, IsNumberString} from 'class-validator';
+
 export class BankPaymentDto {
   @IsNotEmpty()
   @IsNumberString()
