@@ -1,9 +1,10 @@
 import {CurrentUser} from '@app/decorators';
 import {CreateOrderDto} from '@app/dtos';
+import {Order} from '@app/entities';
 import {AuthGuard} from '@app/guards';
 import {ValidationService} from '@app/services';
 import {OrdersService} from '@app/services/orders.service';
-import {Body, Controller, Get, Inject, Param, Post, UseGuards, forwardRef} from '@nestjs/common';
+import {Body, Controller, Get, Inject, Param, Post, Put, UseGuards, forwardRef} from '@nestjs/common';
 import {ApiTags} from '@nestjs/swagger';
 
 @ApiTags('orders')
@@ -21,12 +22,17 @@ export class OrdersController {
   }
 
   @Get()
-  getUserOrders(@CurrentUser() user: any) {
+  getUserOrders(@CurrentUser() user: any): Promise<Order[]> {
     return this.ordersService.findOrdersByUserId(user.sub);
   }
 
   @Get(':id')
-  getUserOrderById(@Param('id') id: number, @CurrentUser() user: any) {
+  getUserOrderById(@Param('id') id: number, @CurrentUser() user: any): Promise<Order> {
     return this.ordersService.findUserOrderById(id, user.sub);
+  }
+
+  @Put(':id/cancel')
+  cancelOrder(@Param('id') id: number, @CurrentUser() user: any): Promise<void> {
+    return this.ordersService.cancelOrder(id, user.sub);
   }
 }
