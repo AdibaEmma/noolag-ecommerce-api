@@ -1,11 +1,10 @@
-import { CurrentUser } from '@app/decorators';
-import { CreateOrderDto } from '@app/dtos';
-import { User } from '@app/entities';
-import { AuthGuard } from '@app/guards';
-import { ValidationService } from '@app/services';
-import { OrdersService } from '@app/services/orders.service';
-import { Body, Controller, Inject, Post, UseGuards, forwardRef } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {CurrentUser} from '@app/decorators';
+import {CreateOrderDto} from '@app/dtos';
+import {AuthGuard} from '@app/guards';
+import {ValidationService} from '@app/services';
+import {OrdersService} from '@app/services/orders.service';
+import {Body, Controller, Get, Inject, Param, Post, UseGuards, forwardRef} from '@nestjs/common';
+import {ApiTags} from '@nestjs/swagger';
 
 @ApiTags('orders')
 @Controller()
@@ -18,7 +17,11 @@ export class OrdersController {
 
   @Post()
   createOrder(@Body() createOrderDto: CreateOrderDto, @CurrentUser() user: any) {
-    console.log(user);
     return this.ordersService.createOrder(createOrderDto, user.sub);
+  }
+
+  @Get()
+  getUserOrders(@CurrentUser() user: any) {
+    return this.ordersService.findOrdersByUserId(user.sub);
   }
 }

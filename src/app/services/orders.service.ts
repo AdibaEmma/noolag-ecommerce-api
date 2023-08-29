@@ -49,4 +49,9 @@ export class OrdersService {
 
     return order;
   }
+
+  async findOrdersByUserId(userId: number): Promise<Order[]> {
+    const userOrders = await this.ordersRepository.findAll({where: {userId}});
+    return userOrders;
+  }
 }
