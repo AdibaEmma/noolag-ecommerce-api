@@ -37,6 +37,7 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
+    "paystack": "^2.0.1",
     "pg": "^8.11.3",
     "redis": "^4.6.7",
     "reflect-metadata": "^0.1.13",
