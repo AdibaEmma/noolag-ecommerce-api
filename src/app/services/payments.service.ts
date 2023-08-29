@@ -1,11 +1,13 @@
 import {Injectable} from '@nestjs/common';
 import {OrdersService} from './orders.service';
+import {RequestService} from './requests.service';
 
 @Injectable()
 export class PaymentsService {
-  constructor(private readonly ordersService: OrdersService) {}
+  constructor(
+    private readonly ordersService: OrdersService,
+    private readonly APIRequest: RequestService,
+  ) {}
 
-  createACharge(createPaymentDto: CreatePaymentDto) {
-    throw new Error('Method not implemented.');
-  }
+  async createCharge(createPaymentDto: CreatePaymentDto) {}
 }
