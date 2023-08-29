@@ -5,3 +5,4 @@ export * from './roles.entity';
 export * from './user-roles.entity';
 export * from './orders.entity';
 export * from './order-items.entity';
+export * from './transactions.entity';

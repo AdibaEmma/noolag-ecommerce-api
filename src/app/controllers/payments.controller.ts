@@ -12,6 +12,6 @@ export class PaymentsController {
 
   @Post('initiate-payment')
   initiatePayment(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentsService.initiatePayment(createPaymentDto);
+    return this.paymentsService.createACharge(createPaymentDto);
   }
 }
