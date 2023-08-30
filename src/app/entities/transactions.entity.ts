@@ -22,7 +22,7 @@ export class Transaction extends Model<Transaction> {
   paidAt: Date;
 
   @Column
-  reference: string;
+  authorizationCode: string;
 
   @Column({type: 'DECIMAL(10, 2)', allowNull: false})
   amount: number;
@@ -32,6 +32,9 @@ export class Transaction extends Model<Transaction> {
 
   @Column
   currency: string;
+
+  @Column
+  customerId: number;
 
   @Column
   message: string;

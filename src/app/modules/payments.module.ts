@@ -5,10 +5,11 @@ import {DatabaseModule} from './database.module';
 import {HttpModule} from '@nestjs/axios';
 import {PaymentsService, ValidationService} from '@app/services';
 import {JwtService} from '@nestjs/jwt';
+import {transactionsProviders} from '@app/providers';
 
 @Module({
   imports: [DatabaseModule, HttpModule],
   controllers: [PaymentsController],
-  providers: [PaymentsService, RequestService, JwtService, ValidationService, Logger],
+  providers: [PaymentsService, RequestService, JwtService, ValidationService, Logger, ...transactionsProviders],
 })
 export class PaymentsModule {}

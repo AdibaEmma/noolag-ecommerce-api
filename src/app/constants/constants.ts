@@ -28,3 +28,7 @@ export const usersConstants = {
   users_repository: 'USERS_REPOSITORY',
   roles_repository: 'ROLES_REPOSITORY',
 };
+
+export const transactionsConstants = {
+  transactions_repository: 'TRANSACTIONS_REPOSITORY',
+};
