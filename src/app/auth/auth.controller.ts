@@ -1,7 +1,7 @@
 import {Controller, Post, Body, Inject, forwardRef, HttpCode, HttpStatus} from '@nestjs/common';
 import {AuthService} from './auth.service';
 import {ValidationService} from '@app/services';
-import {LoginDto, SignupDto} from './dto';
+import {LoginDto, ResetPasswordDTO, SignupDto} from './dto';
 import {User} from '@app/entities/users.entity';
 import {
   ApiCreatedResponse,
@@ -39,5 +39,15 @@ export class AuthController {
   async login(@Body() loginDto: LoginDto): Promise<{accessToken}> {
     await this.validationService.validateDto<LoginDto>(LoginDto, loginDto);
     return this.authService.login(loginDto);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('/reset-password')
+  @ApiOperation({summary: 'Reset User password'})
+  @ApiOkResponse({description: 'Password reset successful'})
+  @ApiForbiddenResponse({description: 'Unauthorized Request'})
+  async resetPassword(@Body() resetPasswordDTO: ResetPasswordDTO): Promise<any> {
+    await this.validationService.validateDto<ResetPasswordDTO>(ResetPasswordDTO, resetPasswordDTO);
+    return await this.authService.resetUserPassword(resetPasswordDTO);
   }
 }

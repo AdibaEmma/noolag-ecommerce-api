@@ -28,7 +28,7 @@ export class EmailService {
     this.transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: this.EMAIL_APP_USER, 
+        user: this.EMAIL_APP_USER,
         pass: this.EMAIL_APP_PASSWORD,
       },
     });
@@ -58,7 +58,7 @@ export class EmailService {
 
     return {
       message: 'Email verified successfully',
-    }
+    };
   }
 
   public async sendResetPasswordCode(sendResetPasswordCodeDto: SendResetPasswordCodeDto): Promise<any> {

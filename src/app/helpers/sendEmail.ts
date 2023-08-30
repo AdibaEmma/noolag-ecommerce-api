@@ -28,9 +28,9 @@ export const verified_email_text = (name: string) => `Hi ${name},
   Regards,
   Noolag Team`;
 
-export const verified_email_html = (
-  name: string,
-) => `<div style="margin:30px; padding:30px; border:1px solid black; border-radius: 20px 10px;"><h4><strong>Hi ${name},</strong></h4>
+export const verified_email_html = (name: string) => `
+<div style="margin:30px; padding:30px; border:1px solid black; border-radius: 20px 10px;">
+  <h4><strong>Hi ${name},</strong></h4>
   <p>Congratulations! Your account has been created successfully.</p>
   <p>You can now login at: ${process.env.CLIENT_URL + '/auth/login'}</p>
   <p>Don't hesitate to contact us if you face any problems</p>

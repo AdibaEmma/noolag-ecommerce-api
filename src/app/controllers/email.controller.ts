@@ -1,6 +1,9 @@
-import {Inject, Body, Controller, Post, forwardRef} from '@nestjs/common';
+import {Inject, Body, Controller, Post, forwardRef, UseGuards} from '@nestjs/common';
 import {EmailVerificationDto, SendResetPasswordCodeDto} from '@app/dtos';
 import {EmailService, ValidationService} from '@app/services';
+import {ApiBadRequestResponse, ApiCreatedResponse, ApiOperation, ApiUnprocessableEntityResponse} from '@nestjs/swagger';
+import {RolesGuard} from '@app/guards';
+import {Roles} from '@app/decorators';
 
 @Controller()
 export class EmailController {
@@ -10,6 +13,12 @@ export class EmailController {
   ) {}
 
   @Post('/verify')
+  @UseGuards(RolesGuard)
+  @Roles('user')
+  @ApiOperation({summary: 'Verify User Email'})
+  @ApiCreatedResponse({description: 'Verified successfully'})
+  @ApiBadRequestResponse({description: 'Bad Request: Validation Failed'})
+  @ApiUnprocessableEntityResponse({description: 'Email already verified'})
   async verifyEmail(@Body() emailVerificationDto: EmailVerificationDto): Promise<void> {
     await this.validationService.validateDto<EmailVerificationDto>(EmailVerificationDto, emailVerificationDto);
     return await this.emailService.verifyEmail(emailVerificationDto);
