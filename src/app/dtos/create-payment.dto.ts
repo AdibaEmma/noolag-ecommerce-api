@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {PaymentMethod} from '@app/enums';
 import {IsCurrencySymbol} from '@app/validators';
-import { ApiProperty } from '@nestjs/swagger';
+import {ApiProperty} from '@nestjs/swagger';
 import {IsDecimal, IsEmail, IsNotEmpty, IsNumber, IsPositive} from 'class-validator';
 
 export class CreatePaymentDto {
@@ -9,7 +9,7 @@ export class CreatePaymentDto {
   @IsNumber()
   @IsPositive()
   @ApiProperty({
-    type: String,
+    type: Number,
     description: 'This is a required property',
   })
   orderId: number;
@@ -17,7 +17,7 @@ export class CreatePaymentDto {
   @IsNotEmpty()
   @IsDecimal()
   @ApiProperty({
-    type: String,
+    type: Number,
     description: 'This is a required property',
   })
   amount: number;

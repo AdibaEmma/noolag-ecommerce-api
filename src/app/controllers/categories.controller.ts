@@ -33,6 +33,7 @@ export class CategoriesController {
   @ApiCreatedResponse({description: 'Created successfully', type: Category})
   @ApiResponse({status: 409, description: 'Conflict: Missing Field(s)'})
   @ApiUnprocessableEntityResponse({description: 'Bad Request: Validation Failed'})
+  @ApiForbiddenResponse({description: 'Unauthorized Request'})
   async createCategory(@Body() createCategoryDto: CreateCategoryDto) {
     await this.validationService.validateDto<CreateCategoryDto>(CreateCategoryDto, createCategoryDto);
     return this.categoriesService.createCategory(createCategoryDto);

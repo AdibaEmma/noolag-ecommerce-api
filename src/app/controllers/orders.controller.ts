@@ -5,7 +5,16 @@ import {AuthGuard} from '@app/guards';
 import {ValidationService} from '@app/services';
 import {OrdersService} from '@app/services/orders.service';
 import {Body, Controller, Get, Inject, Param, Post, Put, UseGuards, forwardRef} from '@nestjs/common';
-import {ApiTags} from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiUnprocessableEntityResponse,
+} from '@nestjs/swagger';
 
 @ApiTags('orders')
 @Controller()
@@ -17,21 +26,39 @@ export class OrdersController {
   ) {}
 
   @Post()
+  @ApiOperation({summary: 'Create Order'})
+  @ApiCreatedResponse({description: 'Created successfully', type: Order})
+  @ApiResponse({status: 409, description: 'Conflict: Missing Field(s)'})
+  @ApiUnprocessableEntityResponse({description: 'Bad Request: Validation Failed'})
+  @ApiForbiddenResponse({description: 'Unauthorized Request'})
   createOrder(@Body() createOrderDto: CreateOrderDto, @CurrentUser() user: any) {
     return this.ordersService.createOrder(createOrderDto, user.sub);
   }
 
   @Get()
+  @ApiOperation({summary: 'Find User Orders'})
+  @ApiOkResponse({description: 'Orders returned successfully'})
+  @ApiForbiddenResponse({description: 'Unauthorized Request'})
   getUserOrders(@CurrentUser() user: any): Promise<Order[]> {
     return this.ordersService.findOrdersByUserId(user.sub);
   }
 
   @Get(':id')
+  @ApiOperation({summary: 'Get User Order'})
+  @ApiOkResponse({description: 'Order returned successfully', type: Order})
+  @ApiNotFoundResponse({description: 'Order not found'})
+  @ApiNotFoundResponse({description: 'User not found'})
+  @ApiForbiddenResponse({description: 'Unauthorized Request'})
   getUserOrderById(@Param('id') id: number, @CurrentUser() user: any): Promise<Order> {
     return this.ordersService.findUserOrderById(id, user.sub);
   }
 
   @Put(':id/cancel')
+  @ApiOperation({summary: 'Cancel User Order'})
+  @ApiOkResponse({description: 'Cancelation successful'})
+  @ApiNotFoundResponse({description: 'Order not found'})
+  @ApiNotFoundResponse({description: 'User not found'})
+  @ApiForbiddenResponse({description: 'Unauthorized Request'})
   cancelOrder(@Param('id') id: number, @CurrentUser() user: any): Promise<void> {
     return this.ordersService.cancelOrder(id, user.sub);
   }

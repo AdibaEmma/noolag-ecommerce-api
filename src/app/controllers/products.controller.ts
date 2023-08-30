@@ -1,8 +1,10 @@
+import {Roles} from '@app/decorators';
 import {CreateProductDto} from '@app/dtos/create-product.dto';
 import {UpdateProductDto} from '@app/dtos/update-product.dto';
 import {Product} from '@app/entities';
+import {AuthGuard, RolesGuard} from '@app/guards';
 import {ProductsService, ValidationService} from '@app/services';
-import {Body, Controller, Delete, Get, Inject, Param, Post, Put, forwardRef} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Inject, Param, Post, Put, UseGuards, forwardRef} from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiForbiddenResponse,
@@ -23,6 +25,9 @@ export class ProductsController {
   ) {}
 
   @Post()
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
+  @Roles('admin')
   @ApiOperation({summary: 'Create Product'})
   @ApiCreatedResponse({description: 'Created successfully', type: Product})
   @ApiResponse({status: 409, description: 'Conflict: Missing Field(s)'})
@@ -48,6 +53,9 @@ export class ProductsController {
   }
 
   @Put(':id')
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
+  @Roles('admin')
   @ApiOperation({summary: 'Update Product'})
   @ApiOkResponse({description: 'Product updated successfully', type: Product})
   @ApiNotFoundResponse({description: 'Product not found'})
@@ -59,6 +67,9 @@ export class ProductsController {
   }
 
   @Delete(':id')
+  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard)
+  @Roles('admin')
   @ApiOperation({summary: 'Delete Product'})
   @ApiOkResponse({description: 'Product deleted successfully'})
   @ApiForbiddenResponse({description: 'Unauthorized Request'})
