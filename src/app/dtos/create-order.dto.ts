@@ -64,7 +64,7 @@ export class CreateOrderDto {
   @ApiProperty({
     type: Number,
     description: 'Fee to be charged for shipping',
-    example: 20.00,
+    example: 20.0,
   })
   shippingFee: number;
 

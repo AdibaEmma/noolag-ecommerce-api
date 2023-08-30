@@ -27,6 +27,18 @@ export class User extends Model<User> {
   email: string;
 
   @Column
+  @ApiProperty({example: false, description: 'state of email verification'})
+  isEmailVerified: boolean;
+
+  @Column
+  @ApiProperty({example: 123456, description: 'code sent via email to verify account'})
+  emailVerificationCode: number;
+
+  @Column
+  @ApiProperty({example: 123456, description: 'code needed to reset password'})
+  passwordResetCode: number;
+
+  @Column
   @ApiProperty({example: '*****', description: 'password of the user'})
   password: string;
 

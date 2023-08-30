@@ -1,5 +1,6 @@
 import {ConflictException, Inject, Injectable, UnauthorizedException} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import {UsersService} from '@app/services';
 import {SignupDto} from './dto';
 import {JwtService} from '@nestjs/jwt';
@@ -32,10 +33,12 @@ export class AuthService {
 
     const saltRounds = this.configService.get<number>('auth.bcrypt.saltOrRounds');
     const hashed_password = await bcrypt.hashSync(password, saltRounds);
+    const code = crypto.randomInt(100000, 1000000);
 
     const newUser = await this.usersRepository.create({
       ...signUpData,
       password: hashed_password,
+      emailVerificationCode: code,
     });
 
     const roles = await this.rolesRepository.findAll({where: {name: 'user'}});

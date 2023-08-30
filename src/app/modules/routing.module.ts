@@ -8,6 +8,7 @@ import { AuthModule } from "@app/auth/auth.module";
 import { OrdersModule } from "./orders.module";
 import { PaymentsModule } from "./payments.module";
 import { UsersModule } from "./users.module";
+import { EmailModule } from "./email.module";
 
 const routes: Routes = [
     {
@@ -37,7 +38,11 @@ const routes: Routes = [
     {
         path: '/payments',
         module: PaymentsModule
-    }
+    },
+    {
+        path: '/email',
+        module: EmailModule,
+    },
 ];
 
 @Module({
@@ -49,7 +54,8 @@ const routes: Routes = [
         AuthModule, 
         UsersModule, 
         OrdersModule,
-        PaymentsModule
+        PaymentsModule,
+        EmailModule,
     ],
     exports: [],
 })

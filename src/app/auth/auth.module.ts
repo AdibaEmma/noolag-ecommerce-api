@@ -4,7 +4,7 @@ import {AuthController} from './auth.controller';
 import {PassportModule} from '@nestjs/passport';
 import {JwtModule} from '@nestjs/jwt';
 import {DatabaseModule} from '@app/modules/database.module';
-import {ValidationService} from '@app/services';
+import {EmailService, ValidationService} from '@app/services';
 import {usersProviders} from '@app/providers/users.providers';
 import {UsersService} from '@app/services/users.service';
 import {ConfigService} from '@nestjs/config';
@@ -27,6 +27,6 @@ import {rolesProviders} from '@app/providers/roles.provider';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UsersService, ValidationService, ...usersProviders, ...rolesProviders, Logger],
+  providers: [AuthService, UsersService, ValidationService, EmailService, ...usersProviders, ...rolesProviders, Logger],
 })
 export class AuthModule {}
