@@ -28,5 +28,11 @@ export class Transaction extends Model<Transaction> {
   amount: number;
 
   @Column
+  channel: string;
+
+  @Column
+  currency: string;
+
+  @Column
   message: string;
 }

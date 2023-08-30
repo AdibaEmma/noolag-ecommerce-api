@@ -17,6 +17,7 @@ import {JwtService} from '@nestjs/jwt';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+      envFilePath: '.env',
       load: [configuration],
     }),
     DatabaseModule,

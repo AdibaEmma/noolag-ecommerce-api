@@ -1,3 +1,4 @@
+import {CreatePaymentDto} from '@app/dtos';
 import {AuthGuard} from '@app/guards';
 import {PaymentsService, ValidationService} from '@app/services';
 import {Body, Controller, Inject, Post, UseGuards, forwardRef} from '@nestjs/common';
@@ -12,6 +13,6 @@ export class PaymentsController {
 
   @Post('initiate-payment')
   initiatePayment(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentsService.createACharge(createPaymentDto);
+    return this.paymentsService.initiateTransaction(createPaymentDto);
   }
 }
