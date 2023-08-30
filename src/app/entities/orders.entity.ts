@@ -4,6 +4,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { User } from './users.entity';
 import { OrderItem } from './order-items.entity';
 import { OrderStatus, PaymentMethod, PaymentStatus } from '@app/enums';
+import { UUID } from 'crypto';
+import { Transaction } from './transactions.entity';
 
 @Table
 export class Order extends Model<Order> {
@@ -16,6 +18,10 @@ export class Order extends Model<Order> {
   @ForeignKey(() => User)
   @BelongsTo(() => User, {as: 'userAssociation'})
   userId: number;
+
+  @ForeignKey(() => Transaction)
+  @BelongsTo(() => Transaction, { as: 'transactionAssociation' })
+  transactionId: UUID
 
   @Column({ type: 'DECIMAL(10, 2)', allowNull: false })
   totalCost: number

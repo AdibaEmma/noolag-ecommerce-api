@@ -1,4 +1,3 @@
-import {CurrentUser} from '@app/decorators';
 import {CreatePaymentDto} from '@app/dtos';
 import {AuthGuard} from '@app/guards';
 import {PaymentsService, ValidationService} from '@app/services';

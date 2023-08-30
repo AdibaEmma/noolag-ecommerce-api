@@ -1,7 +1,6 @@
 import {UUID} from 'crypto';
 import {BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table} from 'sequelize-typescript';
 import {Order} from './orders.entity';
-import {User} from './users.entity';
 
 @Table
 export class Transaction extends Model<Transaction> {
