@@ -13,10 +13,6 @@ export class Transaction extends Model<Transaction> {
   @BelongsTo(() => Order, {as: 'orderAssociation'})
   orderId: number;
 
-  @ForeignKey(() => User)
-  @BelongsTo(() => User, {as: 'userAssociation'})
-  userId: number;
-
   @Column
   status: string;
 
@@ -29,14 +25,32 @@ export class Transaction extends Model<Transaction> {
   @Column
   authorizationCode: string;
 
+  @Column
+  reference: string;
+
+  @Column
+  receipt_number: number;
+
   @Column({type: 'DECIMAL(10, 2)', allowNull: false})
   amount: number;
+
+  @Column({type: 'DECIMAL(10, 2)'})
+  fees: number;
 
   @Column
   channel: string;
 
   @Column
   currency: string;
+
+  @Column
+  card_type: string;
+
+  @Column
+  bank: string;
+
+  @Column
+  mobile_money_number: string;
 
   @Column
   customerId: number;

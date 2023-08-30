@@ -1,14 +1,20 @@
-import {Injectable} from '@nestjs/common';
+import {Inject, Injectable} from '@nestjs/common';
 import {RequestService} from './requests.service';
 import {METHODS} from '@app/enums';
 import {CreatePaymentDto} from '@app/dtos';
+import {transactionsConstants} from '@app/constants';
+import {Transaction} from '@app/entities';
+import {randomUUID} from 'crypto';
 
 @Injectable()
 export class PaymentsService {
   PAYSTACK_URL = process.env.PAYSTACK_URL;
   PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
 
-  constructor(private readonly APIRequest: RequestService) {}
+  constructor(
+    @Inject(transactionsConstants.transactions_repository) private transactionsRepository: typeof Transaction,
+    private readonly APIRequest: RequestService,
+  ) {}
 
   async initiateTransaction(createPaymentDto: CreatePaymentDto): Promise<any> {
     const {orderId, email, amount, currency} = createPaymentDto;
@@ -48,10 +54,10 @@ export class PaymentsService {
     return chargeResponse;
   }
 
-  async verifyTransaction(reference: string) {
+  async verifyTransaction(transactionReference: string) {
     const verificationResponse = await this.APIRequest.request({
       method: METHODS.GET,
-      url: `${this.PAYSTACK_URL}/transaction/verify/${reference}`,
+      url: `${this.PAYSTACK_URL}/transaction/verify/${transactionReference}`,
       headers: {
         Authorization: 'Bearer ' + this.PAYSTACK_SECRET_KEY,
         'Content-Type': 'application/json',
@@ -135,6 +141,58 @@ export class PaymentsService {
 
     */
 
-    console.log(verificationResponse);
+    const {
+      status,
+      metadata,
+      transaction_date,
+      paidAt,
+      customer,
+      authorization,
+      fees,
+      currency,
+      channel,
+      card_type,
+      amount,
+      gateway_response,
+      reference,
+      receipt_number,
+    } = verificationResponse;
+
+    const transaction = await this.transactionsRepository.create({
+      id: randomUUID(),
+      orderId: metadata?.custom_fields?.value,
+      status,
+      transactionDate: transaction_date,
+      paidAt,
+      authorizationCode: authorization?.authorization_code,
+      reference,
+      receipt_number,
+      amount,
+      fees,
+      channel,
+      card_type,
+      currency,
+      bank: authorization.bank,
+      mobile_money_number: authorization?.mobile_money_number,
+      customerId: customer.id,
+      message: gateway_response,
+    });
+
+    return await transaction.reload({
+      attributes: [
+        'id',
+        'orderId',
+        'status',
+        'transactionDate',
+        'paidAt',
+        'receipt_number',
+        'fees',
+        'amount',
+        'currency',
+        'channel',
+        'bank',
+        'message',
+      ],
+    });
   }
 }
