@@ -1,10 +1,11 @@
 import {Inject, Body, Controller, Post, forwardRef, UseGuards} from '@nestjs/common';
 import {EmailVerificationDto, SendResetPasswordCodeDto} from '@app/dtos';
 import {EmailService, ValidationService} from '@app/services';
-import {ApiBadRequestResponse, ApiCreatedResponse, ApiOperation, ApiUnprocessableEntityResponse} from '@nestjs/swagger';
+import {ApiBadRequestResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnprocessableEntityResponse} from '@nestjs/swagger';
 import {RolesGuard} from '@app/guards';
 import {Roles} from '@app/decorators';
 
+@ApiTags('email')
 @Controller()
 export class EmailController {
   constructor(
@@ -16,7 +17,7 @@ export class EmailController {
   @UseGuards(RolesGuard)
   @Roles('user')
   @ApiOperation({summary: 'Verify User Email'})
-  @ApiCreatedResponse({description: 'Verified successfully'})
+  @ApiOkResponse({description: 'Verified successfully'})
   @ApiBadRequestResponse({description: 'Bad Request: Validation Failed'})
   @ApiUnprocessableEntityResponse({description: 'Email already verified'})
   async verifyEmail(@Body() emailVerificationDto: EmailVerificationDto): Promise<void> {
@@ -25,6 +26,9 @@ export class EmailController {
   }
 
   @Post('/send-reset-password-code')
+  @ApiOperation({summary: 'Send Reset Password Code'})
+  @ApiOkResponse({description: 'Verified successfully'})
+  @ApiBadRequestResponse({description: 'Bad Request: Validation Failed'})
   async sendResetPasswordCode(@Body() sendResetPasswordCodeDto: SendResetPasswordCodeDto) {
     await this.validationService.validateDto<SendResetPasswordCodeDto>(SendResetPasswordCodeDto, sendResetPasswordCodeDto);
     return await this.emailService.sendResetPasswordCode(sendResetPasswordCodeDto);

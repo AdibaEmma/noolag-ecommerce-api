@@ -6,14 +6,16 @@ export class CreateCategoryDto {
   @IsString()
   @ApiProperty({
     type: String,
-    description: 'This is a required property',
+    description: 'The name of the category',
+    example: 'Electronics',
   })
   name: string;
 
   @IsString()
   @ApiPropertyOptional({
     type: String,
-    description: 'This is an optional property',
+    description: 'Description of the category',
+    example: 'Electronics for the home and office',
   })
   description: string;
 }

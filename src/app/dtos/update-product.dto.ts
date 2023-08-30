@@ -6,6 +6,7 @@ export class UpdateProductDto {
   @ApiProperty({
     type: String,
     description: 'Name update property',
+    example: 'Dell wireless keyboard',
   })
   name: string;
 
@@ -13,6 +14,7 @@ export class UpdateProductDto {
   @ApiProperty({
     type: String,
     description: 'Description update property',
+    example: 'Dell Wireless Keyboard with standard keys',
   })
   description: string;
 
@@ -20,6 +22,7 @@ export class UpdateProductDto {
   @ApiProperty({
     type: Number,
     description: 'Price update property',
+    example: 345.25,
   })
   price: number;
 
@@ -27,6 +30,7 @@ export class UpdateProductDto {
   @ApiProperty({
     type: Number,
     description: 'Category update property',
+    example: 2,
   })
   categoryId: number;
 }

@@ -72,6 +72,7 @@ export class CreateOrderDto {
   @ApiPropertyOptional({
     type: String,
     description: 'Additional notes for order',
+    example: '',
   })
   notes: string;
 }

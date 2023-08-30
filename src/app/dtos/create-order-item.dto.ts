@@ -6,7 +6,8 @@ export class CreateOrderItemDto {
   @IsNotEmpty()
   @ApiProperty({
     type: Number,
-    description: 'This is a required property',
+    description: 'ProductId of the selected product',
+    example: 1,
   })
   productId: number;
 
@@ -14,7 +15,8 @@ export class CreateOrderItemDto {
   @IsNotEmpty()
   @ApiProperty({
     type: Number,
-    description: 'This is a required property',
+    description: 'The quantity of selected product',
+    example: 5,
   })
   quantity: number;
 }

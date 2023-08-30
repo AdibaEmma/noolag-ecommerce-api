@@ -6,6 +6,7 @@ export class UpdateCategoryDto {
   @ApiProperty({
     type: String,
     description: 'Name update property',
+    example: 'Furniture',
   })
   name: string;
 
@@ -13,6 +14,7 @@ export class UpdateCategoryDto {
   @ApiProperty({
     type: String,
     description: 'Description update property',
+    example: 'Lovely furniture',
   })
   description: string;
 }

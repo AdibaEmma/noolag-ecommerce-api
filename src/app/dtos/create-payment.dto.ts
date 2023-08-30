@@ -10,7 +10,8 @@ export class CreatePaymentDto {
   @IsPositive()
   @ApiProperty({
     type: Number,
-    description: 'This is a required property',
+    description: 'The orderId of to add to the transaction',
+    example: 1,
   })
   orderId: number;
 
@@ -18,7 +19,8 @@ export class CreatePaymentDto {
   @IsDecimal()
   @ApiProperty({
     type: Number,
-    description: 'This is a required property',
+    description: 'Amount to be charged',
+    example: 5000.0,
   })
   amount: number;
 
@@ -26,7 +28,8 @@ export class CreatePaymentDto {
   @IsCurrencySymbol()
   @ApiProperty({
     type: String,
-    description: 'This is a required property',
+    description: 'The currency to charge in',
+    example: 'GHS',
   })
   currency: string;
 
@@ -34,7 +37,8 @@ export class CreatePaymentDto {
   @IsEmail()
   @ApiProperty({
     type: String,
-    description: 'This is a required property',
+    description: 'Email of the customer',
+    example: 'johndoe@example.com',
   })
   email: string;
 }
