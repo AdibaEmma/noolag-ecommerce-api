@@ -1,6 +1,7 @@
 import {UUID} from 'crypto';
 import {BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table} from 'sequelize-typescript';
 import {Order} from './orders.entity';
+import {User} from './users.entity';
 
 @Table
 export class Transaction extends Model<Transaction> {
@@ -11,6 +12,10 @@ export class Transaction extends Model<Transaction> {
   @ForeignKey(() => Order)
   @BelongsTo(() => Order, {as: 'orderAssociation'})
   orderId: number;
+
+  @ForeignKey(() => User)
+  @BelongsTo(() => User, {as: 'userAssociation'})
+  userId: number;
 
   @Column
   status: string;
