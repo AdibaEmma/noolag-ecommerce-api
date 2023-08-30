@@ -29,7 +29,7 @@ export class Transaction extends Model<Transaction> {
   reference: string;
 
   @Column
-  receipt_number: number;
+  receipt_number: string;
 
   @Column({type: 'DECIMAL(10, 2)', allowNull: false})
   amount: number;
