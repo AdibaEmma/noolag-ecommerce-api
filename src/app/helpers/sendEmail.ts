@@ -81,6 +81,22 @@ export const order_placed_html = (name: string, orderId: number) => `
   <p><strong>Noolag Team</strong></p></div>
 `;
 
+export const order_shipped_text = (name: string, trackingNumber: number) => `Hi ${name},
+  Your order has been shipped out. 
+  Use this tracking [${trackingNumber}] to track the progress of your order.
+  Do shop with us again. We have a whole catalogue of products just for your needs.
+  Regards,
+  Noolag Team`;
+
+export const order_shipped_html = (name: string, trackingNumber: number) => `
+  <div style="margin:30px; padding:30px; border:1px solid black; border-radius: 20px 10px;"><h4><strong>Hi ${name},</strong></h4>
+  <p>Your order has been shipped out.</p>
+  <p>Use this tracking [${trackingNumber}] to track the progress of your order.</p>
+  <p>Do shop with us again. We have a whole catalogue of products just for your needs</p>
+  <p>Regards,</p>
+  <p><strong>Noolag Team</strong></p></div>
+`;
+
 export const order_cancelled_text = (name: string, orderId: number) => `Hi ${name},
   Your order with id [${orderId}] has been cancelled. 
   Is there a particular reason for the cancellation.
@@ -88,27 +104,11 @@ export const order_cancelled_text = (name: string, orderId: number) => `Hi ${nam
   Regards,
   Noolag Team`;
 
-export const order_shipped_html = (name: string, orderId: number) => `
+export const order_cancelled_html = (name: string, orderId: number) => `
   <div style="margin:30px; padding:30px; border:1px solid black; border-radius: 20px 10px;"><h4><strong>Hi ${name},</strong></h4>
   <p>Your order with id [${orderId}] has been cancelled.</p>
   <p>Is there a particular reason for the cancellation.</p>
   <p>We would love to get your feedback.</p>
-  <p>Regards,</p>
-  <p><strong>Noolag Team</strong></p></div>
-`;
-
-export const order_shipped_text = (name: string, orderId: number) => `Hi ${name},
-  Your order with id [${orderId}] has been cancelled. 
-  Is there a particular reason for the cancellation.
-  We would love to get your feedback.
-  Regards,
-  Noolag Team`;
-
-export const order_cancelled_html = (name: string, orderId: number, trackingNumber: number) => `
-  <div style="margin:30px; padding:30px; border:1px solid black; border-radius: 20px 10px;"><h4><strong>Hi ${name},</strong></h4>
-  <p>Your order has been shipped out.</p>
-  <p>Use this tracking [${trackingNumber}] to track the progress of your order.</p>
-  <p>Do shop with us again. We have a whole catalogue of products just for your needs</p>
   <p>Regards,</p>
   <p><strong>Noolag Team</strong></p></div>
 `;

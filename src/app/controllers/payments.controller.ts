@@ -1,4 +1,4 @@
-import { CurrentUser } from '@app/decorators';
+import {CurrentUser} from '@app/decorators';
 import {CreatePaymentDto} from '@app/dtos';
 import {Transaction} from '@app/entities';
 import {AuthGuard} from '@app/guards';

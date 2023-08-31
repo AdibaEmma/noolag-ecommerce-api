@@ -1,6 +1,6 @@
 import {CurrentUser, Roles} from '@app/decorators';
 import {CreateOrderDto} from '@app/dtos';
-import {Order} from '@app/entities';
+import {Order, User} from '@app/entities';
 import {AuthGuard, RolesGuard} from '@app/guards';
 import {ValidationService} from '@app/services';
 import {OrdersService} from '@app/services/orders.service';
@@ -32,7 +32,7 @@ export class OrdersController {
   @ApiUnprocessableEntityResponse({description: 'Bad Request: Validation Failed'})
   @ApiForbiddenResponse({description: 'Unauthorized Request'})
   createOrder(@Body() createOrderDto: CreateOrderDto, @CurrentUser() user: any) {
-    return this.ordersService.createOrder(createOrderDto, user.sub);
+    return this.ordersService.createOrder(createOrderDto, user as unknown as User);
   }
 
   @Get()
@@ -60,13 +60,13 @@ export class OrdersController {
   @ApiNotFoundResponse({description: 'User not found'})
   @ApiForbiddenResponse({description: 'Unauthorized Request'})
   cancelOrder(@Param('id') id: number, @CurrentUser() user: any): Promise<void> {
-    return this.ordersService.cancelOrder(id, user.sub);
+    return this.ordersService.cancelOrder(id, user as unknown as User);
   }
 
   @Put(':id/ship-order')
   @UseGuards(RolesGuard)
   @Roles('admin')
   shipOrder(@Param('id') id: number, @CurrentUser() user: any): Promise<void> {
-    return this.ordersService.shipOrder(id, user.sub);
+    return this.ordersService.shipOrder(id, user);
   }
 }

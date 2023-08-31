@@ -8,6 +8,12 @@ import {
   successful_registration_text,
   verified_email_html,
   verified_email_text,
+  order_placed_text,
+  order_placed_html,
+  order_cancelled_text,
+  order_cancelled_html,
+  order_shipped_text,
+  order_shipped_html,
 } from '@app/helpers';
 import {Injectable, Logger, UnauthorizedException, UnprocessableEntityException} from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
@@ -104,6 +110,27 @@ export class EmailService {
     const subject = 'Account Created Successfully';
     const text = verified_email_text(name);
     const html = verified_email_html(name);
+    await this.sendEmail(to, subject, text, html);
+  }
+
+  public async sendOrderPlacedEmail(to: string, name: string, orderId: number): Promise<void> {
+    const subject = 'Order placed successfully';
+    const text = order_placed_text(name, orderId);
+    const html = order_placed_html(name, orderId);
+    await this.sendEmail(to, subject, text, html);
+  }
+
+  public async sendOrderCancelledEmail(to: string, name: string, orderId: number): Promise<void> {
+    const subject = 'Order cancelled';
+    const text = order_cancelled_text(name, orderId);
+    const html = order_cancelled_html(name, orderId);
+    await this.sendEmail(to, subject, text, html);
+  }
+
+  public async sendOrderShippedEmail(to: string, name: string, trackingNumber: number): Promise<void> {
+    const subject = 'Order has been shipped';
+    const text = order_shipped_text(name, trackingNumber);
+    const html = order_shipped_html(name, trackingNumber);
     await this.sendEmail(to, subject, text, html);
   }
 

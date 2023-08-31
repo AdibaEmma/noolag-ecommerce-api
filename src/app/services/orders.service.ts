@@ -1,12 +1,13 @@
 import {ordersConstants} from '@app/constants';
-import {Order, OrderItem} from '@app/entities';
+import {Order, OrderItem, User} from '@app/entities';
 import {ConflictException, Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {RedisService} from './redis.service';
 import {CreateOrderDto} from '@app/dtos';
 import {ProductsService} from './products.service';
 import {UsersService} from './users.service';
 import {OrderStatus} from '@app/enums';
-import { EmailService } from './email.service';
+import {EmailService} from './email.service';
+import crypto from 'crypto';
 
 @Injectable()
 export class OrdersService {
@@ -19,10 +20,10 @@ export class OrdersService {
     private readonly emailService: EmailService,
   ) {}
 
-  async createOrder(createOrderDto: CreateOrderDto, userId: number): Promise<Order> {
+  async createOrder(createOrderDto: CreateOrderDto, user: User): Promise<Order> {
     const {totalCost, shippingAddress, billingAddress, discountAmount, taxAmount, shippingFee, notes, orderItems} = createOrderDto;
 
-    await this.userService.findUserById(userId);
+    await this.userService.findUserById(user.id);
 
     const order = await this.ordersRepository.create({
       totalCost,
@@ -32,7 +33,7 @@ export class OrdersService {
       taxAmount,
       shippingFee,
       notes,
-      userId,
+      userId: user.id,
     });
 
     const orderItemsPromises = orderItems.map(async (item) => {
@@ -50,6 +51,7 @@ export class OrdersService {
 
     await Promise.all(orderItemsPromises);
 
+    await this.emailService.sendOrderPlacedEmail(user.email, user.firstName, order.id);
     return order;
   }
 
@@ -73,23 +75,28 @@ export class OrdersService {
     return userOrder;
   }
 
-  async cancelOrder(id: number, userId: number): Promise<void> {
-    const order = await this.findUserOrderById(id, userId);
+  async cancelOrder(id: number, user: User): Promise<any> {
+    const order = await this.findUserOrderById(id, user.id);
 
     order.orderStatus = OrderStatus.Cancelled;
     await order.save();
+    await this.emailService.sendOrderCancelledEmail(user.email, user.firstName, id);
   }
 
   async shipOrder(id: number, userId: number): Promise<any> {
     const order = await this.findUserOrderById(id, userId);
 
-    if (!order.orderStatus == OrderStatus.Processing) {
+    if (order.orderStatus !== OrderStatus.Processing) {
       throw new ConflictException('Order is not processed for shipping');
     }
 
+    const trackingNumber = crypto.randomInt(100000, 1000000);
+
+    order.$set('trackingNumber', trackingNumber);
     order.$set('orderStatus', OrderStatus.Shipped);
+    order.$set('shippedDate', Date.now());
     await order.save();
-    
+
     return {
       message: 'order shipped',
     };

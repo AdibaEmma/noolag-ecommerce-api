@@ -65,6 +65,10 @@ export class Order extends Model<Order> {
   @ApiProperty({ example: 123456, description: 'Number attached to order if order is shipped' })
   trackingNumber: number;
 
+  @Column
+  @ApiProperty({ example: '2023-08-30T13:31:12.000Z', description: 'date order is shipped' })
+  shippedDate: Date
+
   @Column({ type: 'text' })
   @ApiProperty({ example: 'extra notes', description: 'notes for the order' })
   notes: string;
