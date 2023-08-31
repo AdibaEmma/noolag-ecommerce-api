@@ -62,4 +62,9 @@ export class OrdersController {
   cancelOrder(@Param('id') id: number, @CurrentUser() user: any): Promise<void> {
     return this.ordersService.cancelOrder(id, user.sub);
   }
+
+  // @Put(':id/ship-order')
+  // shipOrder(@Param('id') id: number, @CurrentUser user: any): Promise<void> {
+  //   return this.
+  // }
 }
