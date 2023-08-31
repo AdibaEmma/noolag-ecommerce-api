@@ -91,6 +91,7 @@ export class PaymentsService {
 
     if (status === 'successful') {
       this.userOrder.paymentStatus = PaymentStatus.Paid;
+      this.userOrder.paymentMethod = channel;
     }
     const orderId = parseInt(metadata?.custom_fields[0]?.value);
     const transaction = await this.transactionsRepository.create({

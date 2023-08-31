@@ -6,6 +6,7 @@ import {HttpModule} from '@nestjs/axios';
 import {PaymentsService, ValidationService} from '@app/services';
 import {JwtService} from '@nestjs/jwt';
 import {RedisService} from '@app/services/redis.service';
+import {ordersProviders, transactionsProviders} from '@app/providers';
 
 @Module({
   imports: [DatabaseModule, HttpModule],
