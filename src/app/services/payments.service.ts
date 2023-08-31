@@ -1,6 +1,6 @@
 import {Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {RequestService} from './requests.service';
-import {METHODS} from '@app/enums';
+import {METHODS, PaymentStatus} from '@app/enums';
 import {CreatePaymentDto} from '@app/dtos';
 import {ordersConstants, transactionsConstants} from '@app/constants';
 import {Order, Transaction} from '@app/entities';
@@ -10,6 +10,7 @@ import {randomUUID} from 'crypto';
 export class PaymentsService {
   PAYSTACK_URL = process.env.PAYSTACK_URL;
   PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
+  userOrder: Order;
   constructor(
     @Inject(transactionsConstants.transactions_repository) private transactionsRepository: typeof Transaction,
     @Inject(ordersConstants.orders_repository) private ordersRepository: typeof Order,
@@ -24,6 +25,8 @@ export class PaymentsService {
     if (!order) {
       throw new NotFoundException('Order not found');
     }
+
+    this.userOrder = order;
 
     const params = {
       email: email,
@@ -86,6 +89,9 @@ export class PaymentsService {
       receipt_number,
     } = verificationResponse.data;
 
+    if (status === 'successful') {
+      this.userOrder.paymentStatus = PaymentStatus.Paid;
+    }
     const orderId = parseInt(metadata?.custom_fields[0]?.value);
     const transaction = await this.transactionsRepository.create({
       id: randomUUID(),
