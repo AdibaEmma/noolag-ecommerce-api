@@ -22,6 +22,7 @@ export class Order extends Model<Order> {
 
   @ForeignKey(() => Transaction)
   @BelongsTo(() => Transaction, { as: 'transactionAssociation' })
+  @ApiProperty({ example: 1, description: 'transaction id for transaction associated with order' })
   transactionId: UUID
 
   @Column({ type: 'DECIMAL(10, 2)', allowNull: false })
@@ -37,38 +38,47 @@ export class Order extends Model<Order> {
   billingAddress: string;
 
   @HasMany(() => OrderItem)
+  @ApiProperty({ example: [{productId: 1, quantity: 5}], description: 'Items added to order' })
   orderItems: OrderItem[];
 
   @Column({
     type: DataType.ENUM(...Object.values(PaymentMethod)),
   })
+  @ApiProperty({ example: 'bank', description: 'Payment method to be associated with transaction' })
   paymentMethod: PaymentMethod;
 
   @Column({
     type: DataType.ENUM(...Object.values(PaymentStatus)),
     defaultValue: PaymentStatus.Pending
   })
+  @ApiProperty({ example: 'pending', description: 'Status regarding payment' })
   paymentStatus: PaymentStatus;
 
   @Column({
     type: DataType.ENUM(...Object.values(OrderStatus)),
     defaultValue: OrderStatus.Pending
   })
+  @ApiProperty({ example: 'pending', description: 'Status regarding order' })
   orderStatus: OrderStatus;
 
   @Column
-  trackingNumber: string;
+  @ApiProperty({ example: 123456, description: 'Number attached to order if order is shipped' })
+  trackingNumber: number;
 
   @Column({ type: 'text' })
+  @ApiProperty({ example: 'extra notes', description: 'notes for the order' })
   notes: string;
 
   @Column({ type: 'DECIMAL(10, 2)' })
+  @ApiProperty({ example: 10.0, description: 'Amount to be dedicated from the total cost for customer' })
   discountAmount: number;
 
   @Column({ type: 'DECIMAL(10, 2)' })
+  @ApiProperty({ example: 1.5, description: 'Amount paid as tax for order' })
   taxAmount: number;
 
   @Column({ type: 'DECIMAL(10, 2)' })
+  @ApiProperty({ example: 123456, description: 'Number attached to order if order is shipped' })
   shippingFee: number;
 
 
@@ -76,5 +86,6 @@ export class Order extends Model<Order> {
     type: DataType.BOOLEAN,
     defaultValue: false
   })
+  @ApiProperty({ example: false, description: 'state if the customer deleted the order' })
   isDeleted: boolean;
 }
