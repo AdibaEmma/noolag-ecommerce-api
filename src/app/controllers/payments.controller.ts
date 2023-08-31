@@ -1,3 +1,4 @@
+import { CurrentUser } from '@app/decorators';
 import {CreatePaymentDto} from '@app/dtos';
 import {Transaction} from '@app/entities';
 import {AuthGuard} from '@app/guards';
@@ -15,13 +16,13 @@ export class PaymentsController {
 
   @HttpCode(HttpStatus.OK)
   @Post('initiate-payment')
+  @UseGuards(AuthGuard)
   @ApiOperation({summary: 'Initiate Payment'})
   @ApiOkResponse({description: 'Transaction initiated successfully'})
   @ApiForbiddenResponse({description: 'Unauthorized Request'})
   @ApiUnprocessableEntityResponse({description: 'Bad Request'})
-  @UseGuards(AuthGuard)
-  initiatePayment(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentsService.initiateTransaction(createPaymentDto);
+  initiatePayment(@Body() createPaymentDto: CreatePaymentDto, @CurrentUser() user: any) {
+    return this.paymentsService.initiateTransaction(createPaymentDto, user.sub);
   }
 
   @Get('verify-transaction')

@@ -1,24 +1,29 @@
-import {Inject, Injectable} from '@nestjs/common';
+import {Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {RequestService} from './requests.service';
 import {METHODS} from '@app/enums';
 import {CreatePaymentDto} from '@app/dtos';
-import {transactionsConstants} from '@app/constants';
-import {Transaction} from '@app/entities';
+import {ordersConstants, transactionsConstants} from '@app/constants';
+import {Order, Transaction} from '@app/entities';
 import {randomUUID} from 'crypto';
 
 @Injectable()
 export class PaymentsService {
   PAYSTACK_URL = process.env.PAYSTACK_URL;
   PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY;
-
   constructor(
     @Inject(transactionsConstants.transactions_repository) private transactionsRepository: typeof Transaction,
+    @Inject(ordersConstants.orders_repository) private ordersRepository: typeof Order,
     private readonly APIRequest: RequestService,
   ) {}
 
-  async initiateTransaction(createPaymentDto: CreatePaymentDto): Promise<any> {
+  async initiateTransaction(createPaymentDto: CreatePaymentDto, userId: number): Promise<any> {
     const {orderId, email, amount, currency} = createPaymentDto;
     const unit_amount = 100;
+
+    const order = await this.ordersRepository.findOne({where: {id: orderId, userId}});
+    if (!order) {
+      throw new NotFoundException('Order not found');
+    }
 
     const params = {
       email: email,
@@ -81,9 +86,10 @@ export class PaymentsService {
       receipt_number,
     } = verificationResponse.data;
 
+    const orderId = parseInt(metadata?.custom_fields[0]?.value);
     const transaction = await this.transactionsRepository.create({
       id: randomUUID(),
-      orderId: parseInt(metadata?.custom_fields[0]?.value),
+      orderId,
       status,
       transactionDate: transaction_date,
       paidAt,
