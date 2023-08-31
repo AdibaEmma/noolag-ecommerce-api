@@ -1,6 +1,6 @@
 import {Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {RequestService} from './requests.service';
-import {METHODS, PaymentStatus} from '@app/enums';
+import {METHODS, OrderStatus, PaymentStatus} from '@app/enums';
 import {CreatePaymentDto} from '@app/dtos';
 import {ordersConstants, transactionsConstants} from '@app/constants';
 import {Order, Transaction} from '@app/entities';
@@ -92,7 +92,9 @@ export class PaymentsService {
     if (status === 'successful') {
       this.userOrder.paymentStatus = PaymentStatus.Paid;
       this.userOrder.paymentMethod = channel;
+      this.userOrder.orderStatus = OrderStatus.Processing;
     }
+    await this.userOrder.save();
     const orderId = parseInt(metadata?.custom_fields[0]?.value);
     const transaction = await this.transactionsRepository.create({
       id: randomUUID(),

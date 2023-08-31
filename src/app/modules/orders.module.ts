@@ -1,9 +1,9 @@
 import {OrdersService} from '@app/services/orders.service';
-import {Module} from '@nestjs/common';
+import {Logger, Module} from '@nestjs/common';
 import {DatabaseModule} from './database.module';
 import {ordersProviders} from '@app/providers/orders.providers';
 import {OrdersController} from '@app/controllers/orders.controller';
-import {CategoriesService, ProductsService, UsersService, ValidationService} from '@app/services';
+import {CategoriesService, EmailService, ProductsService, UsersService, ValidationService} from '@app/services';
 import {orderItemsProviders} from '@app/providers/orders-items.providers';
 import {RedisService} from '@app/services/redis.service';
 import {JwtService} from '@nestjs/jwt';
@@ -20,7 +20,9 @@ import {rolesProviders} from '@app/providers/roles.provider';
     ProductsService,
     CategoriesService,
     UsersService,
+    EmailService,
     JwtService,
+    Logger,
     ...ordersProviders,
     ...orderItemsProviders,
     ...productsProviders,

@@ -1,11 +1,12 @@
 import {ordersConstants} from '@app/constants';
 import {Order, OrderItem} from '@app/entities';
-import {Inject, Injectable, NotFoundException} from '@nestjs/common';
+import {ConflictException, Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {RedisService} from './redis.service';
 import {CreateOrderDto} from '@app/dtos';
 import {ProductsService} from './products.service';
 import {UsersService} from './users.service';
 import {OrderStatus} from '@app/enums';
+import { EmailService } from './email.service';
 
 @Injectable()
 export class OrdersService {
@@ -15,6 +16,7 @@ export class OrdersService {
     private readonly redisService: RedisService,
     private readonly productsService: ProductsService,
     private readonly userService: UsersService,
+    private readonly emailService: EmailService,
   ) {}
 
   async createOrder(createOrderDto: CreateOrderDto, userId: number): Promise<Order> {
@@ -76,5 +78,20 @@ export class OrdersService {
 
     order.orderStatus = OrderStatus.Cancelled;
     await order.save();
+  }
+
+  async shipOrder(id: number, userId: number): Promise<any> {
+    const order = await this.findUserOrderById(id, userId);
+
+    if (!order.orderStatus == OrderStatus.Processing) {
+      throw new ConflictException('Order is not processed for shipping');
+    }
+
+    order.$set('orderStatus', OrderStatus.Shipped);
+    await order.save();
+    
+    return {
+      message: 'order shipped',
+    };
   }
 }

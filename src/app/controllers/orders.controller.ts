@@ -1,7 +1,7 @@
-import {CurrentUser} from '@app/decorators';
+import {CurrentUser, Roles} from '@app/decorators';
 import {CreateOrderDto} from '@app/dtos';
 import {Order} from '@app/entities';
-import {AuthGuard} from '@app/guards';
+import {AuthGuard, RolesGuard} from '@app/guards';
 import {ValidationService} from '@app/services';
 import {OrdersService} from '@app/services/orders.service';
 import {Body, Controller, Get, Inject, Param, Post, Put, UseGuards, forwardRef} from '@nestjs/common';
@@ -63,8 +63,10 @@ export class OrdersController {
     return this.ordersService.cancelOrder(id, user.sub);
   }
 
-  // @Put(':id/ship-order')
-  // shipOrder(@Param('id') id: number, @CurrentUser user: any): Promise<void> {
-  //   return this.
-  // }
+  @Put(':id/ship-order')
+  @UseGuards(RolesGuard)
+  @Roles('admin')
+  shipOrder(@Param('id') id: number, @CurrentUser() user: any): Promise<void> {
+    return this.ordersService.shipOrder(id, user.sub);
+  }
 }
