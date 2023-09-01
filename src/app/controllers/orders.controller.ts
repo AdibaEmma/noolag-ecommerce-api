@@ -1,5 +1,6 @@
 import {CurrentUser, Roles} from '@app/decorators';
 import {CreateOrderDto} from '@app/dtos';
+import { ShipOrderDto } from '@app/dtos/ship-order.dto';
 import {Order, User} from '@app/entities';
 import {AuthGuard, RolesGuard} from '@app/guards';
 import {ValidationService} from '@app/services';
@@ -66,7 +67,12 @@ export class OrdersController {
   @Put(':id/ship-order')
   @UseGuards(RolesGuard)
   @Roles('admin')
-  shipOrder(@Param('id') id: number, @CurrentUser() user: any): Promise<void> {
-    return this.ordersService.shipOrder(id, user);
+  @ApiOperation({summary: 'Ship User Order'})
+  @ApiOkResponse({description: 'order shipped'})
+  @ApiNotFoundResponse({description: 'Order not found'})
+  @ApiNotFoundResponse({description: 'User not found'})
+  @ApiForbiddenResponse({description: 'Unauthorized Request'})
+  shipOrder(@Param('id') id: number, @Body() shipOrderDto: ShipOrderDto, @CurrentUser() user: any): Promise<void> {
+    return this.ordersService.shipOrder(id, user, shipOrderDto);
   }
 }

@@ -83,7 +83,7 @@ export class OrdersService {
     await this.emailService.sendOrderCancelledEmail(user.email, user.firstName, id);
   }
 
-  async shipOrder(id: number, userId: number): Promise<any> {
+  async shipOrder(id: number, userId: number, shipOrderDto: ShipOrderDto): Promise<any> {
     const order = await this.findUserOrderById(id, userId);
 
     if (order.orderStatus !== OrderStatus.Processing) {
@@ -95,6 +95,7 @@ export class OrdersService {
     order.$set('trackingNumber', trackingNumber);
     order.$set('orderStatus', OrderStatus.Shipped);
     order.$set('shippedDate', Date.now());
+    order.$set('estimatedArrivalDate', shipOrderDto.eta);
     await order.save();
 
     return {

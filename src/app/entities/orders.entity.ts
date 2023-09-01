@@ -69,6 +69,10 @@ export class Order extends Model<Order> {
   @ApiProperty({ example: '2023-08-30T13:31:12.000Z', description: 'date order is shipped' })
   shippedDate: Date
 
+  @Column
+  @ApiProperty({ example: '2023-09-09', description: 'date order is estimated to arrive to customer' })
+  estimatedArrivalDate: Date
+
   @Column({ type: 'text' })
   @ApiProperty({ example: 'extra notes', description: 'notes for the order' })
   notes: string;
