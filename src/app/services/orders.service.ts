@@ -2,7 +2,7 @@ import {ordersConstants} from '@app/constants';
 import {Order, OrderItem, User} from '@app/entities';
 import {ConflictException, Inject, Injectable, NotFoundException} from '@nestjs/common';
 import {RedisService} from './redis.service';
-import {CreateOrderDto} from '@app/dtos';
+import {CreateOrderDto, ShipOrderDto} from '@app/dtos';
 import {ProductsService} from './products.service';
 import {UsersService} from './users.service';
 import {OrderStatus} from '@app/enums';
@@ -95,7 +95,7 @@ export class OrdersService {
     order.$set('trackingNumber', trackingNumber);
     order.$set('orderStatus', OrderStatus.Shipped);
     order.$set('shippedDate', Date.now());
-    order.$set('estimatedArrivalDate', shipOrderDto.eta);
+    order.estimatedArrivalDate = shipOrderDto.eta;
     await order.save();
 
     return {

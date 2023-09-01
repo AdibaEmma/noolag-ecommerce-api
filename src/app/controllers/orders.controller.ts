@@ -1,6 +1,6 @@
 import {CurrentUser, Roles} from '@app/decorators';
 import {CreateOrderDto} from '@app/dtos';
-import { ShipOrderDto } from '@app/dtos/ship-order.dto';
+import {ShipOrderDto} from '@app/dtos/ship-order.dto';
 import {Order, User} from '@app/entities';
 import {AuthGuard, RolesGuard} from '@app/guards';
 import {ValidationService} from '@app/services';
