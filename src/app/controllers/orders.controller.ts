@@ -5,7 +5,7 @@ import {Order, User} from '@app/entities';
 import {AuthGuard, RolesGuard} from '@app/guards';
 import {ValidationService} from '@app/services';
 import {OrdersService} from '@app/services/orders.service';
-import {Body, Controller, Get, Inject, Param, Post, Put, UseGuards, forwardRef} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Inject, Param, Post, Put, UseGuards, forwardRef} from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiForbiddenResponse,
@@ -74,5 +74,15 @@ export class OrdersController {
   @ApiForbiddenResponse({description: 'Unauthorized Request'})
   shipOrder(@Param('id') id: number, @Body() shipOrderDto: ShipOrderDto, @CurrentUser() user: any): Promise<void> {
     return this.ordersService.shipOrder(id, user, shipOrderDto);
+  }
+
+  @Delete(':id')
+  @Roles('user')
+  @ApiOperation({summary: 'Delete User Order'})
+  @ApiNotFoundResponse({description: 'Order not found'})
+  @ApiNotFoundResponse({description: 'User not found'})
+  @ApiForbiddenResponse({description: 'Unauthorized Request'})
+  deleteOrder(@Param('id') id: number, @CurrentUser() user: any) {
+    return this.ordersService.deleteOrder(id, user.sub);
   }
 }

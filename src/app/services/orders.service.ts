@@ -56,7 +56,7 @@ export class OrdersService {
   }
 
   async findOrdersByUserId(userId: number): Promise<Order[]> {
-    const userOrders = await this.ordersRepository.findAll({where: {userId}});
+    const userOrders = await this.ordersRepository.findAll({where: {userId, isDeleted: false}});
     return userOrders;
   }
 
@@ -101,5 +101,13 @@ export class OrdersService {
     return {
       message: 'order shipped',
     };
+  }
+
+  async deleteOrder(id: number, userId: number): Promise<void> {
+    const userOrder = await this.findUserOrderById(id, userId);
+
+    userOrder.isDeleted = true;
+
+    await userOrder.save();
   }
 }
