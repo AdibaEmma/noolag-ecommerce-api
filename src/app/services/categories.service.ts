@@ -4,7 +4,7 @@ import {Category, Product} from '@app/entities';
 import {ConflictException, Inject, Injectable, MethodNotAllowedException, NotFoundException} from '@nestjs/common';
 import {RedisService} from './redis.service';
 import {categoriesConstants, productsConstants} from '@app/constants/constants';
-import {areContentsEqual} from '@app/helpers';
+import {calculateHash} from '@app/helpers';
 
 @Injectable()
 export class CategoriesService {
@@ -28,16 +28,28 @@ export class CategoriesService {
   }
 
   async findAllCategories(): Promise<Category[]> {
-    const cachedCategories = await this.redisService.get('allCategories');
+    const cachedCategoriesJson = await this.redisService.get('allCategories');
+
+    if (cachedCategoriesJson) {
+      const cachedCategories = JSON.parse(cachedCategoriesJson);
+      const cachedHash = calculateHash(cachedCategories);
+
+      const categories = await this.categoryRepository.findAll({
+        include: [Product],
+      });
+
+      const currentHash = calculateHash(categories);
+
+      if (cachedHash === currentHash) {
+        return cachedCategories;
+      }
+    }
+
     const categories = await this.categoryRepository.findAll({
       include: [Product],
     });
 
-    if (areContentsEqual(categories, cachedCategories)) {
-      return cachedCategories;
-    }
-
-    await this.redisService.set('allCategories', categories);
+    await this.redisService.set('allCategories', JSON.stringify(categories));
     return categories;
   }
 

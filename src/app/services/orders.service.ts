@@ -8,6 +8,7 @@ import {UsersService} from './users.service';
 import {OrderStatus} from '@app/enums';
 import {EmailService} from './email.service';
 import crypto from 'crypto';
+import {calculateHash} from '@app/helpers';
 
 @Injectable()
 export class OrdersService {
@@ -56,7 +57,24 @@ export class OrdersService {
   }
 
   async findOrdersByUserId(userId: number): Promise<Order[]> {
+    const cachedUserOrdersJson = await this.redisService.get('allUserOrders');
+
+    if (cachedUserOrdersJson) {
+      const cachedUserOrders = JSON.parse(cachedUserOrdersJson);
+      const cachedHash = calculateHash(cachedUserOrders);
+
+      const categories = await this.ordersRepository.findAll({where: {userId, isDeleted: false}});
+
+      const currentHash = calculateHash(categories);
+
+      if (cachedHash === currentHash) {
+        return cachedUserOrders;
+      }
+    }
+
     const userOrders = await this.ordersRepository.findAll({where: {userId, isDeleted: false}});
+
+    await this.redisService.set('allUserOrders', JSON.stringify(userOrders));
     return userOrders;
   }
 

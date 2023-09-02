@@ -5,7 +5,7 @@ import {CategoriesService} from './categories.service';
 import {UpdateProductDto} from '@app/dtos/update-product.dto';
 import {RedisService} from './redis.service';
 import {productsConstants} from '@app/constants';
-import {areContentsEqual} from '@app/helpers';
+import {calculateHash} from '@app/helpers';
 
 @Injectable()
 export class ProductsService {
@@ -33,14 +33,24 @@ export class ProductsService {
   }
 
   async findAllProducts(): Promise<Product[]> {
-    const cachedProducts = await this.redisService.get('allProducts');
+    const cachedProductsJson = await this.redisService.get('allProducts');
+
+    if (cachedProductsJson) {
+      const cachedProducts = JSON.parse(cachedProductsJson);
+      const cachedHash = calculateHash(cachedProducts);
+
+      const categories = await this.productRepository.findAll();
+
+      const currentHash = calculateHash(categories);
+
+      if (cachedHash === currentHash) {
+        return cachedProducts;
+      }
+    }
 
     const products = await this.productRepository.findAll();
 
-    if (areContentsEqual(products, cachedProducts)) {
-      return cachedProducts;
-    }
-    await this.redisService.set('allProducts', products);
+    await this.redisService.set('allProducts', JSON.stringify(products));
     return products;
   }
 

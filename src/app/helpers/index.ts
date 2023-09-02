@@ -1,2 +1,2 @@
-export * from './check-contents-equality';
+export * from './calculate-hash';
 export * from './sendEmail';
