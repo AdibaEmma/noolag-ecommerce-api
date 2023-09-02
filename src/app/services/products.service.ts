@@ -36,15 +36,19 @@ export class ProductsService {
     const cachedProductsJson = await this.redisService.get('allProducts');
 
     if (cachedProductsJson) {
-      const cachedProducts = JSON.parse(cachedProductsJson);
-      const cachedHash = calculateHash(cachedProducts);
+      try {
+        const cachedProducts = JSON.parse(cachedProductsJson);
+        const cachedHash = calculateHash(cachedProducts);
 
-      const categories = await this.productRepository.findAll();
+        const categories = await this.productRepository.findAll();
 
-      const currentHash = calculateHash(categories);
+        const currentHash = calculateHash(categories);
 
-      if (cachedHash === currentHash) {
-        return cachedProducts;
+        if (cachedHash === currentHash) {
+          return cachedProducts;
+        }
+      } catch (error) {
+        console.error('Error parsing cachedProducts JSON:', error);
       }
     }
 

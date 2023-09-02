@@ -66,7 +66,7 @@ export const successful_password_reset_html = (
   <p><strong>Noolag Team</strong></p></div>`;
 
 export const order_placed_text = (name: string, orderId: number) => `Hi ${name},
-  Your order with id [${orderId}] has been cancelled. 
+  Your order with id [${orderId}] has been placed. 
   Follow the laid out steps to initiate a transaction and ship out your order.
   Don't hesitate to contact us if you face any problems.
   Regards,

@@ -21,10 +21,10 @@ export class OrdersService {
     private readonly emailService: EmailService,
   ) {}
 
-  async createOrder(createOrderDto: CreateOrderDto, user: User): Promise<Order> {
+  async createOrder(createOrderDto: CreateOrderDto, user: any): Promise<Order> {
     const {totalCost, shippingAddress, billingAddress, discountAmount, taxAmount, shippingFee, notes, orderItems} = createOrderDto;
 
-    await this.userService.findUserById(user.id);
+    await this.userService.findUserById(user.sub);
 
     const order = await this.ordersRepository.create({
       totalCost,
@@ -52,7 +52,7 @@ export class OrdersService {
 
     await Promise.all(orderItemsPromises);
 
-    await this.emailService.sendOrderPlacedEmail(user.email, user.firstName, order.id);
+    await this.emailService.sendOrderPlacedEmail(user.email, user.name, order.id);
     return order;
   }
 
@@ -60,15 +60,19 @@ export class OrdersService {
     const cachedUserOrdersJson = await this.redisService.get('allUserOrders');
 
     if (cachedUserOrdersJson) {
-      const cachedUserOrders = JSON.parse(cachedUserOrdersJson);
-      const cachedHash = calculateHash(cachedUserOrders);
+      try {
+        const cachedUserOrders = JSON.parse(cachedUserOrdersJson);
+        const cachedHash = calculateHash(cachedUserOrders);
 
-      const categories = await this.ordersRepository.findAll({where: {userId, isDeleted: false}});
+        const categories = await this.ordersRepository.findAll({where: {userId, isDeleted: false}});
 
-      const currentHash = calculateHash(categories);
+        const currentHash = calculateHash(categories);
 
-      if (cachedHash === currentHash) {
-        return cachedUserOrders;
+        if (cachedHash === currentHash) {
+          return cachedUserOrders;
+        }
+      } catch (error) {
+        console.error('Error parsing cachedOrders JSON:', error);
       }
     }
 

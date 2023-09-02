@@ -26,7 +26,9 @@ export class User extends Model<User> {
   @ApiProperty({example: 'johndoe@example.com', description: 'email of the user'})
   email: string;
 
-  @Column
+  @Column({
+    defaultValue: false,
+  })
   @ApiProperty({example: false, description: 'state of email verification'})
   isEmailVerified: boolean;
 

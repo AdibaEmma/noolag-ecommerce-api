@@ -31,20 +31,24 @@ export class CategoriesService {
     const cachedCategoriesJson = await this.redisService.get('allCategories');
 
     if (cachedCategoriesJson) {
-      const cachedCategories = JSON.parse(cachedCategoriesJson);
-      const cachedHash = calculateHash(cachedCategories);
+      console.log(cachedCategoriesJson);
+      try {
+        const cachedCategories = JSON.parse(cachedCategoriesJson);
+        const cachedHash = calculateHash(cachedCategories);
 
-      const categories = await this.categoryRepository.findAll({
-        include: [Product],
-      });
+        const categories = await this.categoryRepository.findAll({
+          include: [Product],
+        });
 
-      const currentHash = calculateHash(categories);
+        const currentHash = calculateHash(categories);
 
-      if (cachedHash === currentHash) {
-        return cachedCategories;
+        if (cachedHash === currentHash) {
+          return cachedCategories;
+        }
+      } catch (error) {
+        console.error('Error parsing cachedCategories JSON:', error);
       }
     }
-
     const categories = await this.categoryRepository.findAll({
       include: [Product],
     });

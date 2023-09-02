@@ -31,7 +31,7 @@ export class AuthService {
       throw new ConflictException('username already taken');
     }
 
-    const hashed_password = await bcrypt.hashSync(password, this.SALT_LEVEL);
+    const hashed_password = await bcrypt.hashSync(password, parseInt(this.SALT_LEVEL));
     const code = crypto.randomInt(100000, 1000000);
 
     const newUser = await this.usersRepository.create({
