@@ -7,9 +7,9 @@ import {User, Role} from '@app/entities';
 export class UserRole extends Model<UserRole> {
   @ForeignKey(() => User)
   @BelongsTo(() => User, {as: 'userAssociation'})
-  userFK: User;
+  userFk: User;
 
   @ForeignKey(() => Role)
   @BelongsTo(() => Role, {as: 'roleAssociation'})
-  roleFK: Role;
+  roleFk: Role;
 }
