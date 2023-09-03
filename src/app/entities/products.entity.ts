@@ -3,7 +3,9 @@ import {Model, Column, Table, PrimaryKey, AutoIncrement, ForeignKey, BelongsTo} 
 import {Category} from './categories.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Table
+@Table({
+  underscored: true
+})
 export class Product extends Model<Product> {
   @PrimaryKey
   @AutoIncrement

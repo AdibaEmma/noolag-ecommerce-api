@@ -3,7 +3,9 @@ import {AutoIncrement, BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table} 
 import {Product} from './products.entity';
 import {Order} from './orders.entity';
 
-@Table
+@Table({
+  underscored: true,
+})
 export class OrderItem extends Model<OrderItem> {
   @PrimaryKey
   @AutoIncrement

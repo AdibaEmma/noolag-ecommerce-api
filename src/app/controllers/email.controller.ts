@@ -15,7 +15,6 @@ export class EmailController {
 
   @Post('/verify')
   @UseGuards(RolesGuard)
-  @Roles('user')
   @ApiOperation({summary: 'Verify User Email'})
   @ApiOkResponse({description: 'Verified successfully'})
   @ApiBadRequestResponse({description: 'Bad Request: Validation Failed'})

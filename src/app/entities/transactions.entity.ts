@@ -3,7 +3,9 @@ import {BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table} from 'sequelize
 import {Order} from './orders.entity';
 import {ApiProperty} from '@nestjs/swagger';
 
-@Table
+@Table({
+  underscored: true,
+})
 export class Transaction extends Model<Transaction> {
   @PrimaryKey
   @Column

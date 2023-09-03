@@ -3,7 +3,9 @@ import { Model, Column, Table, PrimaryKey, AutoIncrement, HasMany } from 'sequel
 import { Product } from './products.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Table
+@Table({
+  underscored: true
+})
 export class Category extends Model<Category> {
   @PrimaryKey
   @AutoIncrement
@@ -16,7 +18,7 @@ export class Category extends Model<Category> {
   name: string;
 
   @Column
-  @ApiProperty({ example: 'Electronics for home and office', description: 'description of the category' })
+  @ApiProperty({example: 'Electronics for home and office', description: 'description of the category'})
   description: string;
 
   @HasMany(() => Product)

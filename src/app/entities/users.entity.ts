@@ -1,8 +1,10 @@
-import {AutoIncrement, BelongsToMany, Column, Model, PrimaryKey, Table} from 'sequelize-typescript';
-import {Role, UserRole} from '@app/entities';
+import {AutoIncrement, BelongsToMany, Column, HasMany, Model, PrimaryKey, Table} from 'sequelize-typescript';
+import {Order, Role, UserRole} from '@app/entities';
 import {ApiProperty} from '@nestjs/swagger';
 
-@Table
+@Table({
+  underscored: true,
+})
 export class User extends Model<User> {
   @PrimaryKey
   @AutoIncrement
@@ -46,4 +48,7 @@ export class User extends Model<User> {
 
   @BelongsToMany(() => Role, () => UserRole)
   roles: Role[];
+
+  @HasMany(() => Order)
+  userOrders: Order[];
 }

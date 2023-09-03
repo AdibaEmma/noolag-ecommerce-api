@@ -34,7 +34,7 @@ export class OrdersService {
       taxAmount,
       shippingFee,
       notes,
-      userId: user.id,
+      userId: user.sub,
     });
 
     const orderItemsPromises = orderItems.map(async (item) => {

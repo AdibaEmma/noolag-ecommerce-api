@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Model, Column, Table, PrimaryKey, AutoIncrement, ForeignKey, BelongsTo, HasMany, DataType } from 'sequelize-typescript';
+import { Model, Column, Table, PrimaryKey, AutoIncrement, ForeignKey, BelongsTo, HasMany, DataType, HasOne } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { User } from './users.entity';
 import { OrderItem } from './order-items.entity';
@@ -7,7 +7,9 @@ import { OrderStatus, PaymentMethod, PaymentStatus } from '@app/enums';
 import { UUID } from 'crypto';
 import { Transaction } from './transactions.entity';
 
-@Table
+@Table({
+  underscored: true
+})
 export class Order extends Model<Order> {
   @PrimaryKey
   @AutoIncrement
@@ -21,7 +23,7 @@ export class Order extends Model<Order> {
   userId: number;
 
   @ForeignKey(() => Transaction)
-  @BelongsTo(() => Transaction, { as: 'transactionAssociation' })
+  @HasOne(() => Transaction, { as: 'orderTransaction' })
   @ApiProperty({ example: 1, description: 'transaction id for transaction associated with order' })
   transactionId: UUID
 
@@ -69,7 +71,9 @@ export class Order extends Model<Order> {
   @ApiProperty({ example: '2023-08-30T13:31:12.000Z', description: 'date order is shipped' })
   shippedDate: Date
 
-  @Column
+  @Column({
+    type: DataType.DATEONLY,
+  })
   @ApiProperty({ example: '2023-09-09', description: 'date order is estimated to arrive to customer' })
   estimatedArrivalDate: Date
 
